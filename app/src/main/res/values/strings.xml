@@ -1,0 +1,148 @@
+<resources>
+
+    <!-- 共通のボタン（戻る、次へなどのボタンのテキストなど） -->
+    <string name="Button_Back">戻る</string>
+    <string name="Button_Next">次へ</string>
+    <string name="Button_Home">ホームに戻る</string>
+    <string name="Button_Save">保存する</string>
+    <string name="EditText_hint">入力してください</string>
+
+    <!--ポップアップ(Fragment)　セーブの確認-->
+    <string name="save_confirm_okButton">OK</string>
+    <string name="save_confirm_text">保存されました</string>
+    <!-- 戻るボタン確認 -->
+    <string name="back_confirm">確認</string>
+    <string name="back_confirm_text">本当に戻りますか？</string>
+    <string name="back_confirm_explainText">入力した情報は消えます</string>
+    <string name="back_confirm_YesButton">はい</string>
+    <string name="back_confirm_NoButton">いいえ</string>
+
+
+    <!-- activity_main String(トップ画面の文字列) -->
+    <string name="app_name">目的・目標管理アプリver2</string>
+    <string name="top_app_title">目的・目標管理アプリ</string>
+    <string name="top_create_PurposeGoal">新しい目的・目標を追加</string>
+    <string name="top_confirm_PurposeGoal">目的・目標一覧</string>
+    <string name="top_habitTracking">習慣トラッキング</string>
+    <string name="top_taskManager">タスク管理</string>
+    <string name="top_option">設定</string>
+    <string name="top_help">ヘルプ</string>
+
+    <!-- create_top_choose(立てるのは目的か目標かを決める画面) -->
+    <string name="choose_create_Purpose">目的を立てる</string>
+    <string name="choose_create_Goal">目標を立てる</string>
+
+    <!-- choose_frameWork_purpose(フレームワーク選択画面(目的)) -->
+    <string name="choose_frameWork_purpose_MandalaChart">マンダラチャート</string>
+    <string name="choose_frameWork_purpose_Memo">メモ</string>
+
+    <!-- choose_frameWork_goal(フレームワーク選択画面(目標)) -->
+    <string name="choose_frameWork_goal_WillCanMust">Will・Can・Must</string>
+    <string name="choose_frameWork_goal_SMART">SMART</string>
+    <string name="choose_frameWork_goal_Benchmarking">ベンチマーキング</string>
+    <string name="choose_frameWork_goal_Memo">メモ</string>
+
+    <!-- confirm_top_choose(目的・目標一覧トップ) -->
+    <string name="choose_confirm_purpose">目的を確認する</string>
+    <string name="choose_confirm_goal">目標を確認する</string>
+
+    <!-- add_task_layout -->
+    <string name="add_task_editTextHint_name">タスクの名前を入力してください</string>
+    <string name="add_task_editTextHint_description">タスクの詳細を入力してください</string>
+    <string name="add_task_startDate">開始日</string>
+    <string name="add_task_finishDate">終了日</string>
+    <string name="add_task_saveButton">タスクを保存する</string>
+
+
+
+    <!-- save_goal_layout(goalの保存を行う) -->
+    <string name="save_goal_layout_editText_hint_name">目標の名前を入力してください</string>
+    <string name="save_goal_layout_editText_hint_description">目標の説明を入力してください</string>
+    <string name="save_goal_layout_inputStartDate">開始日</string>
+    <string name="save_goal_layout_inputFinishDate">終了日</string>
+    <string name="save_goal_layout_createTasksButton">タスクを追加・編集</string>
+    <string name="save_goal_layout_saveButton">目標を保存</string>
+
+    <!-- WillCanMust -->
+    <string name="WillCanMust_topTitle">Will・Can・Must</string>
+    <!-- WillCanMust_1 -->
+    <string name="WillCanMust_1_title">Will・Can・Mustとは</string>
+    <string name="WillCanMust_1_explanation">
+        Will・Can・Mustとは、目標設定のための手法で、以下の三つの要素に基づきます：
+        \nWill（やりたいこと）：自分が情熱を持って取り組みたいこと。
+        \nCan（できること）：自分のスキルや能力に基づいて実行可能なこと。
+        \nMust（果たすべきこと）：自分が責任を持って達成すべきこと。
+        \nこれら三つの要素を統合し、具体的な目標に落とし込みます。
+    </string>
+    <!-- WillCanMust_2 -->
+    <string name="WillCanMust_2_title">Will(やりたいこと)</string>
+    <!-- WillCanMust_3 -->
+    <string name="WillCanMust_3_title">Can(できること)</string>
+    <!-- WillCanMust_4 -->
+    <string name="WillCanMust_4_title">Must(果たすべきこと)</string>
+    <!-- WillCanMust_5 -->
+    <string name="WillCanMust_5_title">具体的な目標を設定\nWill,Can,Mustを参考に目標を設定しよう</string>
+
+
+    <!-- SMART -->
+    <string name="SMART_topTitle">SMART</string>
+    <!-- SMART_1 -->
+    <string name="SMART_1_title">SMARTとは</string>
+    <string name="SMART_1_explanation">
+        SMARTとは、以下の五つの要素から成り立つ目標設定の手法です：
+        \nSpecific（具体的）：目標を具体的に設定する。
+        \nMeasurable（測定可能）：目標の進捗を測定できるようにする。
+        \nAchievable（達成可能）：現実的で達成可能な目標を設定する。
+        \nRelevant（関連性のある）：目標が自分の価値観や長期的な目標に関連していることを確認する。
+        \nTime-bound（期限付き）：目標に期限を設定する。
+        \nここでは、立てた目標に対してSMARTの各観点からレビューを行い、自分で目標を確認します。
+    </string>
+    <!-- SMART_2 -->
+    <string name="SMART_2_title">Specific（具体的）について書こう</string>
+    <!-- SMART_3 -->
+    <string name="SMART_3_title">Measurable（測定可能）について書こう</string>
+    <!-- SMART_4 -->
+    <string name="SMART_4_title">Achievable（達成可能）について書こう</string>
+    <!-- SMART_5 -->
+    <string name="SMART_5_title">Relevant（関連性のある）について書こう</string>
+    <!-- SMART_6 -->
+    <string name="SMART_6_title">Time-bound（期限付き）について書こう</string>
+    <!-- SMART_7 -->
+    <string name="SMART_7_title">具体的な目標を設定\n今までの入力を参考に目標を設定しよう</string>
+
+
+    <!-- Benchmarking -->
+    <string name="Benchmarking_topTitle">Benchmarking</string>
+    <!-- Benchmarking_1 -->
+    <string name="Benchmarking_1_title">Benchmarkingとは</string>
+    <string name="Benchmarking_1_explanation">
+        ベンチマーキングは、ビジネスやマーケティングで使われる手法ですが、ここでは個人の目標設定に活用します。
+        \n目標を立てる：具体的な目標を設定します。
+        \nベンチマーク対象の選定：目標達成のために参考にする対象を選びます。
+        \n情報収集と分析：選定した対象について情報を収集し、分析します。
+        \n現状との比較：収集した情報を基に、自分の現状と比較します。
+    </string>
+    <!-- Benchmarking_2 -->
+    <string name="Benchmarking_2_title">目標を書こう</string>
+    <!-- Benchmarking_3 -->
+    <string name="Benchmarking_3_title">ベンチマーキング対象の選定をしよう</string>
+    <!-- Benchmarking_4 -->
+    <string name="Benchmarking_4_title">選定した対象について情報を収集し、分析しよう</string>
+    <!-- Benchmarking_5 -->
+    <string name="Benchmarking_5_title">自分の現状と比較しよう</string>
+
+    <!-- Memo_Goal 余白を入れるのはUIの関係上幅が狭くなるから -->
+    <string name="Memo_Goal_topTitle">メモ</string>
+    <string name="Memo_Goal_title">自由に目標を書こう</string>
+
+
+    <!-- Confirm Goal&Purpose -->
+    <string name="Confirm_EditButton">編集する</string>
+    <!--Confirm_goal_list-->
+    <string name="ConfirmGoalList_Title">確認する目標を選んでください</string>
+    <!---Confirm_goal_Layout-->
+    <string name="ConfirmGoalLayout_finishButton">確認終了</string>
+    <string name="ConfirmGoalLayout_confirmTaskButton">タスク確認</string>
+    <!-- confirm_taskLayout -->
+    <string name="ConfirmTaskLayout_confirmButton">確認終了</string>
+</resources>

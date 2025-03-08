@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <application
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.目的管理アプリver2"
+        tools:targetApi="31">
+        <activity
+            android:name=".activityClass.MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- 他のアクティビティの追加 -->
+        <activity
+            android:name=".activityClass.createActivityClass.CreateTopChooseActivity"
+            android:exported="false"/>
+        <activity
+            android:name=".activityClass.createActivityClass.CreateGoalChooseFrameworkActivity"
+            android:exported="false"/>
+        <activity
+            android:name=".activityClass.createActivityClass.MemoGoalActivity"
+            android:exported="false"/>
+        <activity
+            android:name=".activityClass.createActivityClass.SMARTActivity"
+            android:exported="false"/>
+        <activity
+            android:name=".activityClass.createActivityClass.WillCanMustActivity"
+            android:exported="false"/>
+        <activity
+            android:name=".activityClass.createActivityClass.BenchmarkingActivity"
+            android:exported="false"/>
+        <activity
+            android:name=".activityClass.createActivityClass.SaveGoalActivity"
+            android:exported="false"/>
+        <activity
+            android:name=".fragmentClass.AddTaskFragment"
+            android:exported="false"/>
+        <activity
+            android:name=".activityClass.confirmActivityClass.ConfirmGoalListActivity"
+            android:exported="false"/>
+        <activity
+            android:name=".activityClass.confirmActivityClass.ConfirmTopChooseActivity"
+            android:exported="false"/>
+        <activity
+            android:name=".activityClass.confirmActivityClass.ConfirmBenchmarkingActivity"
+            android:exported="false"/>
+        <activity
+            android:name=".activityClass.confirmActivityClass.ConfirmGoalActivity"
+            android:exported="false"/>
+        <activity
+            android:name=".activityClass.confirmActivityClass.ConfirmMemoGoalActivity"
+            android:exported="false"/>
+        <activity
+            android:name=".activityClass.confirmActivityClass.ConfirmWillCanMustActivity"
+            android:exported="false"/>
+        <activity
+            android:name=".activityClass.confirmActivityClass.ConfirmSMARTActivity"
+            android:exported="false"/>
+    </application>
+
+</manifest>

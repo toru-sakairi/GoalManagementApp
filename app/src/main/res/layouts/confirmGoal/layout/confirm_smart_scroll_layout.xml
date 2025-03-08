@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- smart 1 -->
+            <TextView
+                android:id="@+id/confirm_smart_1_topTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/SMART_topTitle"
+                android:textSize="25sp" />
+
+            <TextView
+                android:id="@+id/confirm_smart_1_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/SMART_1_title"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/confirm_smart_1_explanation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/SMART_1_explanation"
+                android:textSize="16sp" />
+
+            <!-- SMART 2 -->
+
+            <TextView
+                android:id="@+id/confirm_smart_S_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/SMART_2_title"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/confirm_smart_textView_Specific"
+                android:layout_width="match_parent"
+                android:layout_height="67dp"
+                android:layout_marginTop="8dp"
+                android:textSize="15sp" />
+
+            <!-- SMART 3 -->
+
+            <TextView
+                android:id="@+id/confirm_smart_M_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/SMART_3_title"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/confirm_smart_textView_Measurable"
+                android:layout_width="match_parent"
+                android:layout_height="67dp"
+                android:layout_marginTop="8dp"
+                android:textSize="15sp" />
+
+            <!-- SMART 4 -->
+
+            <TextView
+                android:id="@+id/confirm_smart_A_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/SMART_4_title"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/confirm_smart_textView_Achievable"
+                android:layout_width="match_parent"
+                android:layout_height="67dp"
+                android:layout_marginTop="8dp"
+                android:textSize="15sp" />
+
+            <!-- SMART 5 -->
+
+            <TextView
+                android:id="@+id/confirm_smart_R_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/SMART_5_title"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/confirm_smart_textView_relevant"
+                android:layout_width="match_parent"
+                android:layout_height="67dp"
+                android:layout_marginTop="8dp"
+                android:textSize="15sp" />
+
+            <!-- SMART 6 -->
+
+            <TextView
+                android:id="@+id/confirm_smart_T_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/SMART_6_title"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/confirm_smart_textView_timeBound"
+                android:layout_width="match_parent"
+                android:layout_height="67dp"
+                android:layout_marginTop="8dp"
+                android:textSize="15sp" />
+
+            <!-- SMART 7 -->
+            <TextView
+                android:id="@+id/confirm_smart_G_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/SMART_7_title"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/confirm_smart_textView_goal"
+                android:layout_width="match_parent"
+                android:layout_height="67dp"
+                android:layout_marginTop="8dp"
+                android:textSize="15sp" />
+
+            <!-- Save and Back Buttons -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/confirm_smart_nextButton"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:layout_weight="1"
+                    android:text="@string/Button_Next"
+                    android:textSize="15sp" />
+
+                <Button
+                    android:id="@+id/confirm_smart_backButton"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_weight="1"
+                    android:text="@string/Button_Back"
+                    android:textSize="15sp" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+    <Button
+        android:id="@+id/confirm_smart_Edit_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|end"
+        android:layout_margin="16dp"
+        android:text="@string/Confirm_EditButton" />
+
+</FrameLayout>
