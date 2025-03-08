@@ -30,6 +30,7 @@ public class ConfirmBenchmarkingActivity extends AppCompatActivity {
     //EditFragmentで変更した際に再ロードするために使う 再ロードするやつは取りやめ
     //private GoalSaveViewModel goalSaveViewModel;
 
+
     //EditFragmentからメソッドを呼び出されるために使用
     private ConfirmBenchmarkingViewModel confirmBenchmarkingViewModel;
 
