@@ -22,6 +22,10 @@ public interface BenchmarkingDao {
     @Delete
     void delete(Benchmarking benchmarking);
 
+    // 指定されたBenchmarkingオブジェクトをidを使用してデータベースから削除
+    @Query("DELETE FROM Benchmarking WHERE id = :id")
+    void deleteById(int id);
+
     // データベース内のすべてのBenchmarkingオブジェクトを取得
     @Query("SELECT * FROM Benchmarking")
     List<Benchmarking> getAllBenchmarking();

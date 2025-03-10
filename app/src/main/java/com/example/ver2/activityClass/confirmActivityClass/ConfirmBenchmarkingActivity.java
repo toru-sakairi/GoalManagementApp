@@ -8,15 +8,10 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.ver2.R;
-import com.example.ver2.dataClass.GoalSaveViewModel;
 import com.example.ver2.dataClass.goalManagement.Benchmarking;
-import com.example.ver2.dataClass.goalManagement.Memo_Goal;
 import com.example.ver2.fragmentClass.confirmFragments.ConfirmBenchmarkingEditFragment;
 import com.example.ver2.fragmentClass.viewModels.ConfirmBenchmarkingViewModel;
 

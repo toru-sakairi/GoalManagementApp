@@ -19,7 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.ver2.RecyclerViewTaskListAdapter;
 import com.example.ver2.activityClass.MainActivity;
-import com.example.ver2.dataClass.GoalSaveViewModel;
+import com.example.ver2.dataClass.GoalDataViewModel;
 import com.example.ver2.dataClass.goalManagement.GoalType;
 import com.example.ver2.fragmentClass.AddTaskFragment;
 import com.example.ver2.R;
@@ -37,7 +37,7 @@ import java.util.Date;
 import java.util.List;
 
 public class SaveGoalActivity extends AppCompatActivity {
-    private GoalSaveViewModel goalSaveViewModel;
+    private GoalDataViewModel goalDataViewModel;
 
     private WillCanMust wcm;
     private SMART smart;
@@ -63,7 +63,7 @@ public class SaveGoalActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
 
-        goalSaveViewModel = new ViewModelProvider(this).get(GoalSaveViewModel.class);
+        goalDataViewModel = new ViewModelProvider(this).get(GoalDataViewModel.class);
         //前の画面で作ったオブジェクトを生成
         if (intent != null) {
             if (intent.hasExtra("willCanMust")) {
@@ -137,7 +137,7 @@ public class SaveGoalActivity extends AppCompatActivity {
                     memo.setGoal(goal);
                 }
 
-                goalSaveViewModel.insertGoal(goal, wcm, benchmarking, smart, memo);
+                goalDataViewModel.insertGoal(goal, wcm, benchmarking, smart, memo);
 
                 //ホームに戻る
                 Intent intent = new Intent(SaveGoalActivity.this, MainActivity.class);

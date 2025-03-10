@@ -22,6 +22,10 @@ public interface GoalDao {
     @Delete
     void delete(Goal goal);
 
+    // 指定されたGoalオブジェクトをidを使用してデータベースから削除
+    @Query("DELETE FROM goals WHERE id = :id")
+    void deleteById(int id);
+
     // データベース内のすべてのGoalオブジェクトを取得
     @Query("SELECT * FROM goals")
     List<Goal> getAllGoals();

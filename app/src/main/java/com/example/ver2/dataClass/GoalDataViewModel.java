@@ -1,9 +1,7 @@
 package com.example.ver2.dataClass;
 
-import static com.example.ver2.dataClass.goalManagement.GoalType.BENCHMARKING;
-import static com.example.ver2.dataClass.goalManagement.GoalType.WILL_CAN_MUST;
-
 import android.app.Application;
+import android.util.Log;
 
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
@@ -21,12 +19,12 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class GoalSaveViewModel extends AndroidViewModel {
+public class GoalDataViewModel extends AndroidViewModel {
     private final AppDatabase db;
     private final ExecutorService executorService;
     private final MutableLiveData<List<Goal>> allGoals = new MutableLiveData<>();
 
-    public GoalSaveViewModel(Application application) {
+    public GoalDataViewModel(Application application) {
         super(application);
         db = AppDatabase.getInstance(application);
         executorService = Executors.newSingleThreadExecutor();
@@ -43,6 +41,11 @@ public class GoalSaveViewModel extends AndroidViewModel {
             List<Benchmarking> benchmarkingGoals = db.benchmarkingDao().getAllBenchmarking();
             List<WillCanMust> wcms = db.wcmDao().getAllWillCanMust();
             List<Memo_Goal> memoGoals = db.memoGoalDao().getAllMemoGoals();
+
+            Log.d("Debug:Load'&SaveDatas","SMART Goals: " + smartGoals.size());
+            Log.d("Debug:Load'&SaveDatas","Benchmarking Goals: " + benchmarkingGoals.size());
+            Log.d("Debug:Load'&SaveDatas","WCM Goals: " + wcms.size());
+            Log.d("Debug:Load'&SaveDatas","Memo Goals: " + memoGoals.size());
 
             List<Goal> newGoalList = new ArrayList<>();
             newGoalList.addAll(smartGoals);
@@ -68,6 +71,36 @@ public class GoalSaveViewModel extends AndroidViewModel {
 
     public LiveData<Memo_Goal> getMemoGoalByID(int id) {
         return db.memoGoalDao().getMemoGoalById(id);
+    }
+
+    public void deleteSMARTByID(int id){
+        executorService.execute(() -> {
+            db.smartDao().deleteById(id);
+            //デバッグ：削除後、もう一度GoalListを表示すると落ちる
+            //削除後にデータベースを再取得
+            loadGoalListFromDatabase();
+        });
+    }
+
+    public void deleteWCMByID(int id){
+        executorService.execute(() -> {
+            db.wcmDao().deleteById(id);
+            loadGoalListFromDatabase();
+        });
+    }
+
+    public void deleteBenchmarkingByID(int id){
+        executorService.execute(() -> {
+            db.benchmarkingDao().deleteById(id);
+            loadGoalListFromDatabase();
+        });
+    }
+
+    public void deleteMemoGoalByID(int id){
+        executorService.execute(() -> {
+            db.memoGoalDao().deleteById(id);
+            loadGoalListFromDatabase();
+        });
     }
 
     public void updateSMART(SMART smart){
@@ -116,4 +149,6 @@ public class GoalSaveViewModel extends AndroidViewModel {
             }
         });
     }
+
+
 }

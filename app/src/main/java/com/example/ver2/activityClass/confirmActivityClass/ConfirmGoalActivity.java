@@ -3,15 +3,11 @@ package com.example.ver2.activityClass.confirmActivityClass;
 import static android.content.ContentValues.TAG;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Debug;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CalendarView;
-import android.widget.DatePicker;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,10 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.ver2.Converters;
 import com.example.ver2.R;
 import com.example.ver2.RecyclerViewTaskListAdapter;
-import com.example.ver2.activityClass.createActivityClass.MemoGoalActivity;
-import com.example.ver2.activityClass.createActivityClass.SMARTActivity;
-import com.example.ver2.activityClass.createActivityClass.WillCanMustActivity;
-import com.example.ver2.dataClass.GoalSaveViewModel;
+import com.example.ver2.dataClass.GoalDataViewModel;
 import com.example.ver2.dataClass.Task;
 import com.example.ver2.dataClass.goalManagement.Benchmarking;
 import com.example.ver2.dataClass.goalManagement.Goal;
@@ -34,21 +27,16 @@ import com.example.ver2.dataClass.goalManagement.GoalType;
 import com.example.ver2.dataClass.goalManagement.Memo_Goal;
 import com.example.ver2.dataClass.goalManagement.SMART;
 import com.example.ver2.dataClass.goalManagement.WillCanMust;
-import com.example.ver2.fragmentClass.AddTaskFragment;
-import com.example.ver2.fragmentClass.confirmFragments.ConfirmBenchmarkingEditFragment;
 import com.example.ver2.fragmentClass.confirmFragments.ConfirmGoalEditFragment;
 import com.example.ver2.fragmentClass.confirmFragments.ConfirmTaskFragment;
-import com.example.ver2.fragmentClass.viewModels.ConfirmBenchmarkingViewModel;
 import com.example.ver2.fragmentClass.viewModels.ConfirmGoalViewModel;
-import com.example.ver2.fragmentClass.viewModels.SaveGoalFragmentViewModel;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 public class ConfirmGoalActivity extends AppCompatActivity {
-    private GoalSaveViewModel goalSaveViewModel;
+    private GoalDataViewModel goalDataViewModel;
 
     private WillCanMust wcm;
     private SMART smart;
@@ -91,7 +79,7 @@ public class ConfirmGoalActivity extends AppCompatActivity {
 
 
         //保存用のViewModel
-        goalSaveViewModel = new ViewModelProvider(ConfirmGoalActivity.this).get(GoalSaveViewModel.class);
+        goalDataViewModel = new ViewModelProvider(ConfirmGoalActivity.this).get(GoalDataViewModel.class);
 
         if (intent != null) {
             if (intent.hasExtra("wcm")) {
@@ -230,16 +218,16 @@ public class ConfirmGoalActivity extends AppCompatActivity {
                 //データベースに保存
                 if (wcm != null) {
                     wcm.setGoal(goal);
-                    goalSaveViewModel.updateWCM(wcm);
+                    goalDataViewModel.updateWCM(wcm);
                 } else if (benchmarking != null) {
                     benchmarking.setGoal(goal);
-                    goalSaveViewModel.updateBenchmarking(benchmarking);
+                    goalDataViewModel.updateBenchmarking(benchmarking);
                 } else if (smart != null) {
                     smart.setGoal(goal);
-                    goalSaveViewModel.updateSMART(smart);
+                    goalDataViewModel.updateSMART(smart);
                 } else if (memo != null) {
                     memo.setGoal(goal);
-                    goalSaveViewModel.updateMemo_Goal(memo);
+                    goalDataViewModel.updateMemo_Goal(memo);
                 }
 
                 Intent intent = new Intent(ConfirmGoalActivity.this, ConfirmGoalListActivity.class);

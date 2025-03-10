@@ -1,6 +1,5 @@
 package com.example.ver2.fragmentClass.confirmFragments;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,14 +9,9 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.ver2.R;
-import com.example.ver2.activityClass.confirmActivityClass.ConfirmBenchmarkingActivity;
-import com.example.ver2.dataClass.GoalSaveViewModel;
 import com.example.ver2.dataClass.goalManagement.Benchmarking;
 import com.example.ver2.fragmentClass.viewModels.ConfirmBenchmarkingViewModel;
 

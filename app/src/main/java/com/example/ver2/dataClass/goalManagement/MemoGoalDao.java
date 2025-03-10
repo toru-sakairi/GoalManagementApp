@@ -22,6 +22,10 @@ public interface MemoGoalDao {
     @Delete
     void delete(Memo_Goal memoGoal);
 
+    // 指定されたMemo_Goalオブジェクトをidを使用してデータベースから削除
+    @Query("DELETE FROM memo_goals WHERE id = :id")
+    void deleteById(int id);
+
     // データベース内のすべてのMemo_Goalオブジェクトを取得
     @Query("SELECT * FROM memo_goals")
     List<Memo_Goal> getAllMemoGoals();

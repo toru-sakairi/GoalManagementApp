@@ -22,6 +22,10 @@ public interface SMARTDao {
     @Delete
     void delete(SMART smart);
 
+    // 指定されたSMARTオブジェクトをidを用いてデータベースから削除
+    @Query("DELETE FROM SMART WHERE id = :id")
+    void deleteById(int id);
+
     // データベース内のすべてのSMARTオブジェクトを取得
     @Query("SELECT * FROM SMART")
     List<SMART> getAllSMART();

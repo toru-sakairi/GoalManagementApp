@@ -4,10 +4,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.ver2.dataClass.AppDatabase;
+import com.example.ver2.dataClass.GoalDataViewModel;
 import com.example.ver2.dataClass.Task;
 import com.example.ver2.dataClass.goalManagement.Goal;
 
@@ -20,18 +24,23 @@ public class RecyclerViewGoalListAdapter extends RecyclerView.Adapter<RecyclerVi
 
     private OnItemClickListener listener;
 
+    //データベース用ViewModel
+    private GoalDataViewModel viewModel;
+
     //クリックリスナを設定するメソッド
     public void setOnItemClickListener(OnItemClickListener listener) {
         this.listener = listener;
     }
 
     //コンストラクタ
-    public RecyclerViewGoalListAdapter(List<Goal> goalList) {
+    public RecyclerViewGoalListAdapter(List<Goal> goalList, GoalDataViewModel viewModel) {
         if (goalList == null) {
             goalList = new ArrayList<>();
         } else {
             this.goalList = goalList;
         }
+
+        this.viewModel = viewModel;
     }
 
     //ViewHolderを作成するメソッド
@@ -39,7 +48,7 @@ public class RecyclerViewGoalListAdapter extends RecyclerView.Adapter<RecyclerVi
     public RecyclerViewGoalListAdapter.GoalViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         //Task１つ分のレイアウトをViewとして読み込む
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.goal_itemlist_layout, parent, false);
-        return new RecyclerViewGoalListAdapter.GoalViewHolder(view);
+        return new RecyclerViewGoalListAdapter.GoalViewHolder(view, this);
     }
 
     //ViewHolderとデータを紐づけるメソッド
@@ -89,7 +98,11 @@ public class RecyclerViewGoalListAdapter extends RecyclerView.Adapter<RecyclerVi
         public TextView finishDateTextView;
         public TextView stateTextView;
 
-        public GoalViewHolder(View view) {
+        public Button deleteButton;
+
+        private RecyclerViewGoalListAdapter adapter;
+
+        public GoalViewHolder(View view, RecyclerViewGoalListAdapter adapter) {
             super(view);
             goalTypeTextView = view.findViewById(R.id.goalList_goalType);
             goalNameTextView = view.findViewById(R.id.goalList_goalName);
@@ -98,6 +111,48 @@ public class RecyclerViewGoalListAdapter extends RecyclerView.Adapter<RecyclerVi
             startDateTextView = view.findViewById(R.id.goalList_goalStartDate);
             finishDateTextView = view.findViewById(R.id.goalList_goalfinishDate);
             stateTextView = view.findViewById(R.id.goalList_goalState);
+
+            this.adapter = adapter;
+
+            deleteButton = view.findViewById(R.id.goalList_deleteButton);
+
+            deleteButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int position = getAdapterPosition();
+                    if(position != RecyclerView.NO_POSITION && adapter != null){
+                        adapter.removeGoal(position);
+                    }
+                }
+            });
+        }
+    }
+
+    //データベースから削除するメソッド
+    public void removeGoal(int position){
+        if(position >= 0 && position < goalList.size()){
+            //クリックされたGoalオブジェクトを取得
+            Goal clickedGoal = goalList.get(position);
+            //そのGoalオブジェクトのIDを参照してViewModelを使用し削除（サブクラスごとに分ける）
+            if(clickedGoal != null && clickedGoal.getType() != null) {
+                switch (clickedGoal.getType()) {
+                    case SMART: {
+                        viewModel.deleteSMARTByID(clickedGoal.getID());
+                    }
+                    case WILL_CAN_MUST: {
+                        viewModel.deleteWCMByID(clickedGoal.getID());
+                    }
+                    case BENCHMARKING: {
+                        viewModel.deleteBenchmarkingByID(clickedGoal.getID());
+                    }
+                    case MEMO_GOAL: {
+                        viewModel.deleteMemoGoalByID(clickedGoal.getID());
+                    }
+                }
+            }
+            //goalListから削除を行う
+            goalList.remove(position);
+            notifyItemRemoved(position);
         }
     }
 }

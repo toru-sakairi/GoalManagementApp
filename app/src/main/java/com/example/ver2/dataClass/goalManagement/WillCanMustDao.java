@@ -22,6 +22,10 @@ public interface WillCanMustDao {
     @Delete
     void delete(WillCanMust willCanMust);
 
+    // 指定されたWillCanMustオブジェクトをidを使用してをデータベースから削除
+    @Query("DELETE FROM WILL_CAN_MUST WHERE id = :id")
+    void deleteById(int id);
+
     // データベース内のすべてのWillCanMustオブジェクトを取得
     @Query("SELECT * FROM will_can_must")
     List<WillCanMust> getAllWillCanMust();

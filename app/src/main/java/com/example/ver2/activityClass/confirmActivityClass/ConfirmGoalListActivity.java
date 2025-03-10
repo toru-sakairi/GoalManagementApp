@@ -15,7 +15,7 @@ import com.example.ver2.R;
 import com.example.ver2.RecyclerViewGoalListAdapter;
 import com.example.ver2.dataClass.goalManagement.Benchmarking;
 import com.example.ver2.dataClass.goalManagement.Goal;
-import com.example.ver2.dataClass.GoalSaveViewModel;
+import com.example.ver2.dataClass.GoalDataViewModel;
 import com.example.ver2.dataClass.goalManagement.Memo_Goal;
 import com.example.ver2.dataClass.goalManagement.SMART;
 import com.example.ver2.dataClass.goalManagement.WillCanMust;
@@ -27,7 +27,7 @@ public class ConfirmGoalListActivity extends AppCompatActivity {
     private List<Goal> goalList = new ArrayList<>(); // 初期化しておく
     private RecyclerView recyclerView;
     private RecyclerViewGoalListAdapter adapter;
-    private GoalSaveViewModel goalSaveViewModel;
+    private GoalDataViewModel goalDataViewModel;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -37,18 +37,19 @@ public class ConfirmGoalListActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.confirm_goal_lists_RecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        adapter = new RecyclerViewGoalListAdapter(goalList);
-        recyclerView.setAdapter(adapter);
-
-        goalSaveViewModel = new ViewModelProvider(this).get(GoalSaveViewModel.class);
-        goalSaveViewModel.getAllGoals().observe(this, goals -> {
+        goalDataViewModel = new ViewModelProvider(this).get(GoalDataViewModel.class);
+        goalDataViewModel.getAllGoals().observe(this, goals -> {
             goalList.clear();
             goalList.addAll(goals);
             adapter.notifyDataSetChanged();
         });
 
+
+        adapter = new RecyclerViewGoalListAdapter(goalList, goalDataViewModel);
+        recyclerView.setAdapter(adapter);
+
         // データ取得開始
-        goalSaveViewModel.loadGoalListFromDatabase();
+        goalDataViewModel.loadGoalListFromDatabase();
 
         //RecyclerViewのクリックの実装
         adapter.setOnItemClickListener(new RecyclerViewGoalListAdapter.OnItemClickListener() {
@@ -60,7 +61,7 @@ public class ConfirmGoalListActivity extends AppCompatActivity {
                     //鍵かっこでやるとスコープがその範囲に限定される
                     case SMART: {
                         Intent intent = new Intent(ConfirmGoalListActivity.this, ConfirmSMARTActivity.class);
-                        LiveData<SMART> smartLiveData = goalSaveViewModel.getSMARTByID(clickedGoal.getID());
+                        LiveData<SMART> smartLiveData = goalDataViewModel.getSMARTByID(clickedGoal.getID());
                         smartLiveData.observe(ConfirmGoalListActivity.this, smart -> {
                             if(smart != null){
                                 intent.putExtra("smart",smart);
@@ -74,7 +75,7 @@ public class ConfirmGoalListActivity extends AppCompatActivity {
                     }
                     case WILL_CAN_MUST: {
                         Intent intent = new Intent(ConfirmGoalListActivity.this, ConfirmWillCanMustActivity.class);
-                        LiveData<WillCanMust> wcmLiveData = goalSaveViewModel.getWCMByID(clickedGoal.getID());
+                        LiveData<WillCanMust> wcmLiveData = goalDataViewModel.getWCMByID(clickedGoal.getID());
                         wcmLiveData.observe(ConfirmGoalListActivity.this, wcm ->{
                             if(wcm != null){
                                 intent.putExtra("willCanMust", wcm);
@@ -87,7 +88,7 @@ public class ConfirmGoalListActivity extends AppCompatActivity {
                     }
                     case BENCHMARKING: {
                         Intent intent = new Intent(ConfirmGoalListActivity.this, ConfirmBenchmarkingActivity.class);
-                        LiveData<Benchmarking> benchmarkingLiveData = goalSaveViewModel.getBenchmarkingByID(clickedGoal.getID());
+                        LiveData<Benchmarking> benchmarkingLiveData = goalDataViewModel.getBenchmarkingByID(clickedGoal.getID());
                         benchmarkingLiveData.observe(ConfirmGoalListActivity.this, benchmarking -> {
                             if(benchmarking != null){
                                 intent.putExtra("benchmarking", benchmarking);
@@ -100,7 +101,7 @@ public class ConfirmGoalListActivity extends AppCompatActivity {
                     }
                     case MEMO_GOAL: {
                         Intent intent = new Intent(ConfirmGoalListActivity.this, ConfirmMemoGoalActivity.class);
-                        LiveData<Memo_Goal> memoLiveData = goalSaveViewModel.getMemoGoalByID(clickedGoal.getID());
+                        LiveData<Memo_Goal> memoLiveData = goalDataViewModel.getMemoGoalByID(clickedGoal.getID());
                         memoLiveData.observe(ConfirmGoalListActivity.this, memo -> {
                             if(memo != null){
                                 intent.putExtra("memo_goal", memo);
