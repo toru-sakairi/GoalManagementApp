@@ -1,3 +1,8 @@
+/*
+    GoalクラスをスーパークラスとするMemo_Goalクラス
+    自由記述形式での目標設定でのデータとして使用
+ */
+
 package com.example.ver2.dataClass.goalManagement;
 
 import android.os.Parcel;
@@ -17,29 +22,29 @@ import java.util.List;
 public class Memo_Goal extends Goal implements Parcelable {
     private String memo;
 
+    //コンストラクタ：Goalに書かれている属性も含めたもの。データベースから取得するときなどに使用
     public Memo_Goal(String name, String description, Date createDate, java.util.Date startDate, Date finishDate, boolean state, List<Task> tasks, GoalType type, String memo){
         super(name, description, createDate, startDate, finishDate, state, tasks, type);
         this.memo = memo;
     }
 
+    //コンストラクタ：Goalオブジェクトをそのまま入れることができるコンストラクタ
     @Ignore
     public Memo_Goal(Goal goal , String memo){
         super(goal);
         this.memo = memo;
     }
 
+    //コンストラクタ：Goalオブジェクトをnullの状態で作るコンストラクタ（最初にMemo_Goalクラスをインスタンス化するときなどに使用）
     @Ignore
     public Memo_Goal(String memo){
         super(null,null,null,null,null,false,null,GoalType.MEMO_GOAL);
         this.memo = memo;
     }
 
-    public String getMemo(){
-        return memo;
-    }
-    public void setMemo(String memo){
-        this.memo = memo;
-    }
+    //ゲッター＆セッター
+    public String getMemo(){ return memo; }
+    public void setMemo(String memo){ this.memo = memo; }
 
     // Parcelable の実装
     //オブジェクトがどのような種類のコンテンツを含んでいるか記述する。ほとんどの場合0を返す。
@@ -65,13 +70,8 @@ public class Memo_Goal extends Goal implements Parcelable {
     //Parcelableオブジェクトを生成するためのCreatorを定義
     public static final Creator<Memo_Goal> CREATOR = new Creator<Memo_Goal>() {
         @Override
-        public Memo_Goal createFromParcel(Parcel in) {
-            return new Memo_Goal(in);
-        }
-
+        public Memo_Goal createFromParcel(Parcel in) { return new Memo_Goal(in); }
         @Override
-        public Memo_Goal[] newArray(int size) {
-            return new Memo_Goal[size];
-        }
+        public Memo_Goal[] newArray(int size) { return new Memo_Goal[size]; }
     };
 }
