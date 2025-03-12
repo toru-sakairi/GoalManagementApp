@@ -1,3 +1,8 @@
+/*
+    GoalクラスをスーパークラスとするBenchmarkingクラス
+    ベンチマーキングフレームワークを用いた目標設定でのデータとして使用
+ */
+
 package com.example.ver2.dataClass.goalManagement;
 
 import android.os.Parcel;
@@ -20,7 +25,7 @@ public class Benchmarking extends Goal implements Parcelable {
     private String benchMark;
     private String comparison;
 
-
+    //コンストラクタ：Goalに書かれている属性も含めたもの。データベースから取得するときなどに使用
     public Benchmarking(String name, String description, Date createDate, Date startDate, Date finishDate, boolean state, List<Task> tasks, String initialGoal, String target, String benchMark,String comparison, GoalType type){
         super(name, description, createDate, startDate, finishDate, state, tasks, type);
         this.initialGoal = initialGoal;
@@ -29,6 +34,7 @@ public class Benchmarking extends Goal implements Parcelable {
         this.comparison = comparison;
     }
 
+    //コンストラクタ：Goalオブジェクトをそのまま入れることができるコンストラクタ
     @Ignore
     public Benchmarking(Goal goal, String initialGoal, String target, String benchMark, String comparison){
         super(goal);
@@ -38,6 +44,7 @@ public class Benchmarking extends Goal implements Parcelable {
         this.comparison = comparison;
     }
 
+    //コンストラクタ：Goalオブジェクトをnullの状態で作るコンストラクタ（最初にBenchmarkingクラスをインスタンス化するときなどに使用）
     @Ignore
     public Benchmarking(String initialGoal, String target, String benchMark, String comparison){
         super(null,null,null,null,null,false,null, GoalType.BENCHMARKING);
@@ -47,30 +54,15 @@ public class Benchmarking extends Goal implements Parcelable {
         this.comparison = comparison;
     }
 
-    public String getInitialGoal(){
-        return initialGoal;
-    }
-    public String getTarget(){
-        return target;
-    }
-    public String getBenchMark(){
-        return benchMark;
-    }
-    public String getComparison() {
-        return comparison;
-    }
-    public void setInitialGoal(String initialGoal){
-        this.initialGoal = initialGoal;
-    }
-    public void setTarget(String target){
-        this.target = target;
-    }
-    public void setBenchMark(String benchMark){
-        this.benchMark = benchMark;
-    }
-    public void setComparison(String comparison){
-        this.comparison = comparison;
-    }
+    //ゲッター＆セッター
+    public String getInitialGoal(){ return initialGoal; }
+    public void setInitialGoal(String initialGoal){ this.initialGoal = initialGoal; }
+    public String getTarget(){ return target; }
+    public void setTarget(String target){ this.target = target; }
+    public String getBenchMark(){ return benchMark; }
+    public void setBenchMark(String benchMark){ this.benchMark = benchMark; }
+    public String getComparison() { return comparison; }
+    public void setComparison(String comparison){ this.comparison = comparison; }
 
     // Parcelable の実装
     //オブジェクトがどのような種類のコンテンツを含んでいるか記述する。ほとんどの場合0を返す。
@@ -102,13 +94,8 @@ public class Benchmarking extends Goal implements Parcelable {
     //Parcelableオブジェクトを生成するためのCreatorを定義
     public static final Creator<Benchmarking> CREATOR = new Creator<Benchmarking>() {
         @Override
-        public Benchmarking createFromParcel(Parcel in) {
-            return new Benchmarking(in);
-        }
-
+        public Benchmarking createFromParcel(Parcel in) { return new Benchmarking(in); }
         @Override
-        public Benchmarking[] newArray(int size) {
-            return new Benchmarking[size];
-        }
+        public Benchmarking[] newArray(int size) { return new Benchmarking[size]; }
     };
 }
