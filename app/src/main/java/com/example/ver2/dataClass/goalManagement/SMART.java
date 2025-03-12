@@ -1,3 +1,8 @@
+/*
+    GoalクラスをスーパークラスとするSMARTクラス
+    SMARTフレームワークを用いた目標設定でのデータとして使用
+ */
+
 package com.example.ver2.dataClass.goalManagement;
 
 import android.os.Parcel;
@@ -21,6 +26,7 @@ public class SMART extends Goal implements Parcelable {
     private String timeBound;
     private String smartGoal;
 
+    //コンストラクタ：Goalに書かれている属性も含めたもの。データベースから取得するときなどに使用
     public SMART(String name, String description, Date createDate, java.util.Date startDate, Date finishDate, boolean state, List<Task> tasks, GoalType type , String specific, String measurable, String achievable, String relevant, String timeBound, String smartGoal){
         super(name, description, createDate, startDate, finishDate, state, tasks, type);
         this.specific = specific;
@@ -31,6 +37,7 @@ public class SMART extends Goal implements Parcelable {
         this.smartGoal = smartGoal;
     }
 
+    //コンストラクタ：Goalオブジェクトをそのまま入れることができるコンストラクタ
     @Ignore
     public SMART(Goal goal, String s, String m,String a, String r, String t, String g){
         super(goal);
@@ -42,6 +49,7 @@ public class SMART extends Goal implements Parcelable {
         this.smartGoal = g;
     }
 
+    //コンストラクタ：Goalオブジェクトをnullの状態で作るコンストラクタ（最初にSMARTクラスをインスタンス化するときなどに使用）
     @Ignore
     public SMART(String s, String m, String a, String r, String t, String g){
         super(null,null,null,null,null,false,null, GoalType.SMART);
@@ -53,43 +61,19 @@ public class SMART extends Goal implements Parcelable {
         this.smartGoal = g;
     }
 
-
-    public String getSpecific(){
-        return specific;
-    }
-    public String getMeasurable(){
-        return measurable;
-    }
-    public String getAchievable(){
-        return achievable;
-    }
-    public String getRelevant(){
-        return relevant;
-    }
-    public String getTimeBound(){
-        return timeBound;
-    }
-    public String getSmartGoal(){
-        return smartGoal;
-    }
-    public void setSpecific(String specific){
-        this.specific = specific;
-    }
-    public void setMeasurable(String measurable){
-        this.measurable = measurable;
-    }
-    public void setAchievable(String achievable){
-        this.achievable = achievable;
-    }
-    public void setRelevant(String relevant){
-        this.relevant = relevant;
-    }
-    public void setTimeBound(String timeBound) {
-        this.timeBound = timeBound;
-    }
-    public void setSmartGoal(String smartGoal){
-        this.smartGoal = smartGoal;
-    }
+    //ゲッター＆セッター
+    public String getSpecific(){ return specific; }
+    public void setSpecific(String specific){ this.specific = specific; }
+    public String getMeasurable(){ return measurable; }
+    public void setMeasurable(String measurable){ this.measurable = measurable; }
+    public String getAchievable(){ return achievable; }
+    public void setAchievable(String achievable){ this.achievable = achievable; }
+    public String getRelevant(){ return relevant; }
+    public void setRelevant(String relevant){ this.relevant = relevant; }
+    public String getTimeBound(){ return timeBound; }
+    public void setTimeBound(String timeBound) { this.timeBound = timeBound; }
+    public String getSmartGoal(){ return smartGoal; }
+    public void setSmartGoal(String smartGoal){ this.smartGoal = smartGoal; }
 
     // Parcelable の実装
     //オブジェクトがどのような種類のコンテンツを含んでいるか記述する。ほとんどの場合0を返す。
@@ -125,13 +109,8 @@ public class SMART extends Goal implements Parcelable {
     //Parcelableオブジェクトを生成するためのCreatorを定義
     public static final Creator<SMART> CREATOR = new Creator<SMART>() {
         @Override
-        public SMART createFromParcel(Parcel in) {
-            return new SMART(in);
-        }
-
+        public SMART createFromParcel(Parcel in) { return new SMART(in); }
         @Override
-        public SMART[] newArray(int size) {
-            return new SMART[size];
-        }
+        public SMART[] newArray(int size) { return new SMART[size]; }
     };
 }
