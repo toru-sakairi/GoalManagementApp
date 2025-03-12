@@ -3,6 +3,7 @@ package com.example.ver2.dataClass;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.example.ver2.Converters;
 import com.example.ver2.dataClass.goalManagement.Benchmarking;
 
 import java.io.Serializable;
@@ -81,9 +82,9 @@ public class Task implements Parcelable {
         dest.writeInt(ID);
         dest.writeString(name);
         dest.writeString(description);
-        dest.writeSerializable(createDate);
-        dest.writeSerializable(startDate);
-        dest.writeSerializable(finishDate);
+        dest.writeLong(Converters.dateToTimestamp(createDate));
+        dest.writeLong(Converters.dateToTimestamp(startDate));
+        dest.writeLong(Converters.dateToTimestamp(finishDate));
         dest.writeByte((byte) (state ? 1 : 0));
 
     }
@@ -92,9 +93,9 @@ public class Task implements Parcelable {
         ID = in.readInt();
         name = in.readString();
         description = in.readString();
-        createDate = (Date) in.readSerializable();
-        startDate = (Date) in.readSerializable();
-        finishDate = (Date) in.readSerializable();
+        createDate = Converters.fromTimestamp(in.readLong());
+        startDate = Converters.fromTimestamp(in.readLong());
+        finishDate = Converters.fromTimestamp(in.readLong());
         state = in.readByte() != 0;
     }
 

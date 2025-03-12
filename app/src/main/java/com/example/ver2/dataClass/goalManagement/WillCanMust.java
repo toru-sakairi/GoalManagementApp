@@ -24,12 +24,12 @@ public class WillCanMust extends Goal implements Parcelable {
     private String wcmGoal;
 
     //コンストラクタ：Goalに書かれている属性も含めたもの。データベースから取得するときなどに使用
-    public WillCanMust(String name, String description, Date createDate, Date startDate, Date finishDate, boolean state, List<Task> tasks, GoalType type,String will,String can,String must, String willcanmustGoal){
+    public WillCanMust(String name, String description, Date createDate, Date startDate, Date finishDate, boolean state, List<Task> tasks, GoalType type,String will,String can,String must, String wcmGoal){
         super(name, description, createDate, startDate, finishDate, state, tasks, type);
         this.will = will;
         this.can = can;
         this.must = must;
-        this.wcmGoal = willcanmustGoal;
+        this.wcmGoal = wcmGoal;
     }
 
     //コンストラクタ：Goalオブジェクトをそのまま入れることができるコンストラクタ
@@ -44,12 +44,12 @@ public class WillCanMust extends Goal implements Parcelable {
 
     //コンストラクタ：Goalオブジェクトをnullの状態で作るコンストラクタ（最初にWillCanMustクラスをインスタンス化するときなどに使用）
     @Ignore
-    public WillCanMust(String will, String can, String must, String goal){
+    public WillCanMust(String will, String can, String must, String wcmGoal){
         super(null,null,null,null,null,false,null, GoalType.WILL_CAN_MUST);
         this.will = will;
         this.can = can;
         this.must = must;
-        this.wcmGoal = goal;
+        this.wcmGoal = wcmGoal;
     }
 
     //ゲッター＆セッター
@@ -60,7 +60,7 @@ public class WillCanMust extends Goal implements Parcelable {
     public String getMust(){ return must; }
     public void setMust(String must){ this.must = must; }
     public String getWcmGoal(){ return wcmGoal; }
-    public void setWcmGoal(String goal){ this.wcmGoal = goal; }
+    public void setWcmGoal(String wcmGoal){ this.wcmGoal = this.wcmGoal; }
 
     // Parcelable の実装
     //オブジェクトがどのような種類のコンテンツを含んでいるか記述する。ほとんどの場合0を返す。

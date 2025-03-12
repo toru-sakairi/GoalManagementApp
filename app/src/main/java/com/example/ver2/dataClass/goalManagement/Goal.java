@@ -138,9 +138,17 @@ public class Goal implements Parcelable {
         dest.writeInt(ID);
         dest.writeString(name);
         dest.writeString(description);
-        dest.writeSerializable(createDate);
-        dest.writeSerializable(startDate);
-        dest.writeSerializable(finishDate);
+
+        //Serializableだと互換性がなくバグの原因になるため。また、始めにGoalをインスタンス化する際はすべてnullだからnullの場合の初期値を設定する必要がある
+        Long createDateTimestamp = Converters.dateToTimestamp(createDate);
+        dest.writeLong(createDateTimestamp != null ? createDateTimestamp : 0L);
+
+        Long startDateTimestamp = Converters.dateToTimestamp(startDate);
+        dest.writeLong(startDateTimestamp != null ? startDateTimestamp : 0L);
+
+        Long finishDateTimestamp = Converters.dateToTimestamp(finishDate);
+        dest.writeLong(finishDateTimestamp != null ? finishDateTimestamp : 0L);
+
         dest.writeByte((byte) (state ? 1 : 0));
         dest.writeList(tasks); // Task クラスも Parcelable であること
         //Intentで情報が送られない問題(ConfirmGoalActivityとConfirmBenchmarkingActivityの間の問題：EnumをIntで送る)
@@ -152,9 +160,9 @@ public class Goal implements Parcelable {
         ID = in.readInt();
         name = in.readString();
         description = in.readString();
-        createDate = (Date) in.readSerializable();
-        startDate = (Date) in.readSerializable();
-        finishDate = (Date) in.readSerializable();
+        createDate = Converters.fromTimestamp(in.readLong());
+        startDate = Converters.fromTimestamp(in.readLong());
+        finishDate = Converters.fromTimestamp(in.readLong());
         state = in.readByte() != 0;
         //createTypedArrayList():Parcelに書き込まれたParcelableオブジェクトのリストを復元する。ParcelからParcelableオブジェクトのArrayListを読み取るために使用。ジェネリック型TのArrayListを返し、Parcelable.Creator<T>を引数として受け取る
         tasks = in.createTypedArrayList(Task.CREATOR); // Task クラスも Parcelable であること
