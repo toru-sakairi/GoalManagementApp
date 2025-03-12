@@ -1,3 +1,8 @@
+/*
+    GoalクラスをスーパークラスとするWillCanMustクラス
+    Will・Can・Mustフレームワークを用いた目標設定でのデータとして使用
+ */
+
 package com.example.ver2.dataClass.goalManagement;
 
 import android.os.Parcel;
@@ -16,58 +21,46 @@ public class WillCanMust extends Goal implements Parcelable {
     private String will;
     private String can;
     private String must;
-    private String willcanmustGoal;
+    private String wcmGoal;
 
+    //コンストラクタ：Goalに書かれている属性も含めたもの。データベースから取得するときなどに使用
     public WillCanMust(String name, String description, Date createDate, Date startDate, Date finishDate, boolean state, List<Task> tasks, GoalType type,String will,String can,String must, String willcanmustGoal){
         super(name, description, createDate, startDate, finishDate, state, tasks, type);
         this.will = will;
         this.can = can;
         this.must = must;
-        this.willcanmustGoal = willcanmustGoal;
+        this.wcmGoal = willcanmustGoal;
     }
 
+    //コンストラクタ：Goalオブジェクトをそのまま入れることができるコンストラクタ
     @Ignore
     public WillCanMust(Goal goal, String will, String can, String must, String wcmGoal){
         super(goal);
         this.will = will;
         this.can = can;
         this.must = must;
-        this.willcanmustGoal = wcmGoal;
+        this.wcmGoal = wcmGoal;
     }
 
+    //コンストラクタ：Goalオブジェクトをnullの状態で作るコンストラクタ（最初にWillCanMustクラスをインスタンス化するときなどに使用）
     @Ignore
     public WillCanMust(String will, String can, String must, String goal){
         super(null,null,null,null,null,false,null, GoalType.WILL_CAN_MUST);
         this.will = will;
         this.can = can;
         this.must = must;
-        this.willcanmustGoal = goal;
+        this.wcmGoal = goal;
     }
 
-    public String getWill(){
-        return will;
-    }
-    public String getCan(){
-        return can;
-    }
-    public String getMust(){
-        return must;
-    }
-    public String getWillcanmustGoal(){
-        return willcanmustGoal;
-    }
-    public void setWill(String will){
-        this.will = will;
-    }
-    public void setCan(String can){
-        this.can = can;
-    }
-    public void setMust(String must){
-        this.must = must;
-    }
-    public void setWillcanmustGoal(String goal){
-        this.willcanmustGoal = goal;
-    }
+    //ゲッター＆セッター
+    public String getWill(){ return will; }
+    public void setWill(String will){ this.will = will; }
+    public String getCan(){ return can; }
+    public void setCan(String can){ this.can = can; }
+    public String getMust(){ return must; }
+    public void setMust(String must){ this.must = must; }
+    public String getWcmGoal(){ return wcmGoal; }
+    public void setWcmGoal(String goal){ this.wcmGoal = goal; }
 
     // Parcelable の実装
     //オブジェクトがどのような種類のコンテンツを含んでいるか記述する。ほとんどの場合0を返す。
@@ -84,7 +77,7 @@ public class WillCanMust extends Goal implements Parcelable {
         dest.writeString(will);
         dest.writeString(can);
         dest.writeString(must);
-        dest.writeString(willcanmustGoal);
+        dest.writeString(wcmGoal);
     }
 
     protected WillCanMust(Parcel in) {
@@ -93,19 +86,14 @@ public class WillCanMust extends Goal implements Parcelable {
         will = in.readString();
         can = in.readString();
         must = in.readString();
-        willcanmustGoal = in.readString();
+        wcmGoal = in.readString();
     }
 
     //Parcelableオブジェクトを生成するためのCreatorを定義
     public static final Creator<WillCanMust> CREATOR = new Creator<WillCanMust>() {
         @Override
-        public WillCanMust createFromParcel(Parcel in) {
-            return new WillCanMust(in);
-        }
-
+        public WillCanMust createFromParcel(Parcel in) { return new WillCanMust(in); }
         @Override
-        public WillCanMust[] newArray(int size) {
-            return new WillCanMust[size];
-        }
+        public WillCanMust[] newArray(int size) { return new WillCanMust[size]; }
     };
 }

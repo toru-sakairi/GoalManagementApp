@@ -14,8 +14,6 @@ import com.example.ver2.dataClass.goalManagement.WillCanMust;
 import com.example.ver2.fragmentClass.confirmFragments.ConfirmWillCanMustEditFragment;
 import com.example.ver2.fragmentClass.viewModels.ConfirmWillCanMustViewModel;
 
-import org.w3c.dom.Text;
-
 public class ConfirmWillCanMustActivity extends AppCompatActivity {
     private TextView willTextView;
     private TextView canTextView;
@@ -46,7 +44,7 @@ public class ConfirmWillCanMustActivity extends AppCompatActivity {
                 willTextView.setText(wcm.getWill());
                 canTextView.setText(wcm.getCan());
                 mustTextView.setText(wcm.getMust());
-                goalTextView.setText(wcm.getWillcanmustGoal());
+                goalTextView.setText(wcm.getWcmGoal());
             }
         }
 
@@ -90,7 +88,7 @@ public class ConfirmWillCanMustActivity extends AppCompatActivity {
             willTextView.setText(wcm.getWill());
             canTextView.setText(wcm.getCan());
             mustTextView.setText(wcm.getMust());
-            goalTextView.setText(wcm.getWillcanmustGoal());
+            goalTextView.setText(wcm.getWcmGoal());
         }
     }
 }

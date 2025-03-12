@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -43,7 +42,7 @@ public class ConfirmWillCanMustEditFragment extends DialogFragment {
                 willEditText.setText(wcm.getWill());
                 canEditText.setText(wcm.getCan());
                 mustEditText.setText(wcm.getMust());
-                goalEditText.setText(wcm.getWillcanmustGoal());
+                goalEditText.setText(wcm.getWcmGoal());
             }
         }
 
@@ -54,7 +53,7 @@ public class ConfirmWillCanMustEditFragment extends DialogFragment {
                 wcm.setWill(willEditText.getText().toString());
                 wcm.setCan(canEditText.getText().toString());
                 wcm.setMust(mustEditText.getText().toString());
-                wcm.setWillcanmustGoal(goalEditText.getText().toString());
+                wcm.setWcmGoal(goalEditText.getText().toString());
 
                 viewModel.callActivityMethod_updateTextView(wcm);
 

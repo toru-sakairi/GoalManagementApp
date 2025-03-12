@@ -35,7 +35,7 @@ public class WillCanMustActivity extends AppCompatActivity {
                 willEditText.setText(willCanMust.getWill());
                 canEditText.setText(willCanMust.getCan());
                 mustEditText.setText(willCanMust.getMust());
-                goalEditText.setText(willCanMust.getWillcanmustGoal());
+                goalEditText.setText(willCanMust.getWcmGoal());
             }
         }
 
@@ -54,7 +54,7 @@ public class WillCanMustActivity extends AppCompatActivity {
                     willCanMust.setWill(will);
                     willCanMust.setCan(can);
                     willCanMust.setMust(must);
-                    willCanMust.setWillcanmustGoal(goal);
+                    willCanMust.setWcmGoal(goal);
                 }
 
                 Intent intent = new Intent(WillCanMustActivity.this, SaveGoalActivity.class);

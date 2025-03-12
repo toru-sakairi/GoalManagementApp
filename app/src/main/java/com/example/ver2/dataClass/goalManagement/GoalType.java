@@ -1,3 +1,7 @@
+/*
+    Goalクラスをスーパークラスとするサブクラスの種類を判別するのに使用する（フレームワークを判別する）
+ */
+
 package com.example.ver2.dataClass.goalManagement;
 
 public enum GoalType {
