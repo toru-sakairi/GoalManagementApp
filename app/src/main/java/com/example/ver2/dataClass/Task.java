@@ -82,9 +82,16 @@ public class Task implements Parcelable {
         dest.writeInt(ID);
         dest.writeString(name);
         dest.writeString(description);
-        dest.writeLong(Converters.dateToTimestamp(createDate));
-        dest.writeLong(Converters.dateToTimestamp(startDate));
-        dest.writeLong(Converters.dateToTimestamp(finishDate));
+//Serializableだと互換性がなくバグの原因になるため。また、始めにGoalをインスタンス化する際はすべてnullだからnullの場合の初期値を設定する必要がある
+        Long createDateTimestamp = Converters.dateToTimestamp(createDate);
+        dest.writeLong(createDateTimestamp != null ? createDateTimestamp : 0L);
+
+        Long startDateTimestamp = Converters.dateToTimestamp(startDate);
+        dest.writeLong(startDateTimestamp != null ? startDateTimestamp : 0L);
+
+        Long finishDateTimestamp = Converters.dateToTimestamp(finishDate);
+        dest.writeLong(finishDateTimestamp != null ? finishDateTimestamp : 0L);
+
         dest.writeByte((byte) (state ? 1 : 0));
 
     }

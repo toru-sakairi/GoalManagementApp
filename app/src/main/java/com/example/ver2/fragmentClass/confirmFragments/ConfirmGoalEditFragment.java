@@ -203,9 +203,9 @@ public class ConfirmGoalEditFragment extends DialogFragment {
     //とりあえず、Goalオブジェクトにアタッチする感じで、最後にそれぞれのフレームワークのやつに代入させる
     public void addTask(Task task) {
 
-        if(goal != null) {
-            goal.addTask(task);
-        }
+//        if(goal != null) {
+//            goal.addTask(task);
+//        }
         if(taskList != null){
             taskList.add(task);
         }else{

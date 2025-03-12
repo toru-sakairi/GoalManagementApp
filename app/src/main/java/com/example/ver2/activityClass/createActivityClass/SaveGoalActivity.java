@@ -294,7 +294,8 @@ public class SaveGoalActivity extends AppCompatActivity {
         if (taskList == null) {
             taskList = new ArrayList<Task>();
         }
-        goal.addTask(task);
+
+        //goal.addTask(task);
         taskList.add(task);
 
         // アダプターにデータが変更されたことを通知

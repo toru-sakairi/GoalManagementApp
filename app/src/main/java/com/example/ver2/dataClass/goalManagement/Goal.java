@@ -108,12 +108,12 @@ public class Goal implements Parcelable {
     }
 
     // タスク管理メソッド 必要ない可能性あり、タスクリストをActivityクラスとかFragmentクラスで作って、それをセッターで入れればいいだけの可能性(上書きするってこと)
-    public void addTask(Task task) {
-        if (this.tasks == null) {
-            this.tasks = new ArrayList<>();
-        }
-        this.tasks.add(task);
-    }
+//    public void addTask(Task task) {
+//        if (this.tasks == null) {
+//            this.tasks = new ArrayList<>();
+//        }
+//        this.tasks.add(task);
+//    }
 
     public void removeTask(Task task) {
         if (this.tasks != null) {
