@@ -1,26 +1,31 @@
+/*
+    データの基本となるクラス。これをスーパークラスとして、フレームワークごとにサブクラスを作成。
+*/
+
 package com.example.ver2.dataClass.goalManagement;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import androidx.annotation.Nullable;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import java.util.*;
 
-import androidx.room.TypeConverter;
 import androidx.room.TypeConverters;
 
 import com.example.ver2.dataClass.Task;
+//データベースにそのまま入れられないオブジェクトを入れられるように変換するクラス
 import com.example.ver2.Converters;
 
 @Entity(tableName = "goals")
 @TypeConverters(Converters.class)
 public class Goal implements Parcelable {
+    //これは自動生成されるからコンストラクタに入れる必要はない
     @PrimaryKey(autoGenerate = true)
-    private int ID;     //これは自動生成されるからコンストラクタに入れる必要はない
+    private int ID;
+
     private String name;
     private String description;
     @TypeConverters(Converters.class)
@@ -32,9 +37,10 @@ public class Goal implements Parcelable {
     private boolean state;
     @TypeConverters(Converters.class)
     private List<Task> tasks;
+    //どのフレームワークを使用しているか（クラス）判別するため
     private GoalType type;
 
-    // コンストラクタ
+    // コンストラクタ（IDは自動生成）
     public Goal(String name, String description, Date createDate, Date startDate, Date finishDate, boolean state, List<Task> tasks, GoalType type) {
         this.name = name;
         this.description = description;
@@ -42,12 +48,19 @@ public class Goal implements Parcelable {
         this.startDate = startDate;
         this.finishDate = finishDate;
         this.state = state;
-        this.tasks = tasks;
+        this.tasks = tasks != null ? tasks : new ArrayList<>(); //null対策
         this.type = type;
     }
 
+    //コピーコンストラクタ：Goalオブジェクトだけ独立させて編集したりする際に使用される
     @Ignore
     public Goal(Goal goal) {
+        //private変数は同じクラス内であれば、どのインスタンスからでもアクセスできる(=引数のGoalオブジェクトはこのGoalオブジェクトからアクセスしているため取得可能)
+        this(goal.name, goal.description, goal.createDate, goal.startDate, goal.finishDate, goal.state, goal.tasks, goal.type);
+    }
+
+    //Goalオブジェクトの中身だけ変更したい場合に使用
+    public void updateGoal(Goal goal) {
         this.name = goal.getName();
         this.description = goal.getDescription();
         this.createDate = goal.getCreateDate();
@@ -58,103 +71,43 @@ public class Goal implements Parcelable {
         this.type = goal.getType();
     }
 
-    public void setGoal(Goal goal) {
-        this.name = goal.getName();
-        this.description = goal.getDescription();
-        this.createDate = goal.getCreateDate();
-        this.startDate = goal.getStartDate();
-        this.finishDate = goal.getFinishDate();
-        this.state = goal.isState();
-        this.tasks = goal.getTasks();
-        this.type = goal.getType();
-    }
-
-    // ゲッター
-    public int getID() {
-        return ID;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public Date getCreateDate() {
-        return createDate;
-    }
-
-    public Date getStartDate() {
-        return startDate;
-    }
-
-    public Date getFinishDate() {
-        return finishDate;
-    }
-
-    public boolean isState() {
-        return state;
-    }
-
-    public List<Task> getTasks() {
-        return tasks;
-    }
-
-    // セッター
+    // ゲッター&セッター
+    public int getID() { return ID; }
     //IDのセッターは必要ない可能性あり
-    public void setID(int ID) {
-        this.ID = ID;
-    }
+    public void setID(int ID) { this.ID = ID; }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+    public String getDescription() { return description; }
+    public void setDescription(String description) { this.description = description; }
 
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
-    }
+    public Date getCreateDate() { return createDate; }
+    public void setCreateDate(Date createDate) { this.createDate = createDate; }
 
-    public void setStartDate(Date startDate) {
-        this.startDate = startDate;
-    }
+    public Date getStartDate() { return startDate; }
+    public void setStartDate(Date startDate) { this.startDate = startDate; }
 
-    public void setFinishDate(Date finishDate) {
-        this.finishDate = finishDate;
-    }
+    public Date getFinishDate() { return finishDate; }
+    public void setFinishDate(Date finishDate) { this.finishDate = finishDate; }
 
-    public void setState(boolean state) {
-        this.state = state;
-    }
+    public boolean isState() { return state; }
+    public void setState(boolean state) { this.state = state; }
 
-    public void setTasks(List<Task> tasks) {
-        this.tasks = tasks;
-    }
+    public List<Task> getTasks() { return tasks; }
+    public void setTasks(List<Task> tasks) { this.tasks = tasks != null ? tasks : new ArrayList<>(); }
 
-    public GoalType getType() {
-        if (type != null)
-            return type;
-        else
-            return null;
-    }
+    public GoalType getType() { return type; }
+    public void setType(GoalType type) { this.type = type; }
 
-    public void setType(GoalType type) {
-        this.type = type;
-    }
-
-    //state変数は無くてもいいから　今のところActivity遷移で使う
+    //今のところActivity遷移で使う
     public boolean isGoalExist() {
         //存在している場合true
         return name != null && description != null && createDate != null &&
-                startDate != null && finishDate != null && tasks != null;
+                startDate != null && finishDate != null;
     }
 
-    // タスク管理メソッド
+    // タスク管理メソッド 必要ない可能性あり、タスクリストをActivityクラスとかFragmentクラスで作って、それをセッターで入れればいいだけの可能性(上書きするってこと)
     public void addTask(Task task) {
         if (this.tasks == null) {
             this.tasks = new ArrayList<>();
@@ -181,12 +134,6 @@ public class Goal implements Parcelable {
 
     // Parcelable の実装
     @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    ///これ何に使われているか確認する必要あり
-    @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(ID);
         dest.writeString(name);
@@ -197,6 +144,7 @@ public class Goal implements Parcelable {
         dest.writeByte((byte) (state ? 1 : 0));
         dest.writeList(tasks); // Task クラスも Parcelable であること
         //Intentで情報が送られない問題(ConfirmGoalActivityとConfirmBenchmarkingActivityの間の問題：EnumをIntで送る)
+        //.ordinal():列挙型の各定数が定義された順番に対応する序数（インデックス）を返すメソッド
         dest.writeInt(type == null ? -1 : type.ordinal()); // enum の序数を書き込む (null の場合は -1)
     }
 
@@ -208,23 +156,24 @@ public class Goal implements Parcelable {
         startDate = (Date) in.readSerializable();
         finishDate = (Date) in.readSerializable();
         state = in.readByte() != 0;
-        tasks = new ArrayList<>();
-        in.readList(tasks, Task.class.getClassLoader()); // Task クラスも Parcelable であること
+        //createTypedArrayList():Parcelに書き込まれたParcelableオブジェクトのリストを復元する。ParcelからParcelableオブジェクトのArrayListを読み取るために使用。ジェネリック型TのArrayListを返し、Parcelable.Creator<T>を引数として受け取る
+        tasks = in.createTypedArrayList(Task.CREATOR); // Task クラスも Parcelable であること
         //Intentで情報が送られない問題(ConfirmGoalActivityとConfirmBenchmarkingActivityの間の問題：EnumをIntでもらう)
-        int typeOrdinal = in.readInt(); // Parcel から int 値を読み取り、typeOrdinal を宣言と同時に初期化
-        type = typeOrdinal == -1 ? null : GoalType.values()[typeOrdinal]; // 序数から enum を復元 (null の場合は null)
+        //.values():Enumのすべての値を配列として返す。　in.readInt():ParcelからEnumの序数を読み取る。 .values()[]:配列から指定された序数の要素を取得
+        int typeOrdinal = in.readInt();
+        type = (typeOrdinal == -1) ? null : GoalType.values()[typeOrdinal]; // 序数から enum を復元 (null の場合は null)
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
     public static final Creator<Goal> CREATOR = new Creator<Goal>() {
         @Override
-        public Goal createFromParcel(Parcel in) {
-            return new Goal(in);
-        }
-
+        public Goal createFromParcel(Parcel in) { return new Goal(in); }
         @Override
-        public Goal[] newArray(int size) {
-            return new Goal[size];
-        }
+        public Goal[] newArray(int size) { return new Goal[size]; }
     };
 
 }

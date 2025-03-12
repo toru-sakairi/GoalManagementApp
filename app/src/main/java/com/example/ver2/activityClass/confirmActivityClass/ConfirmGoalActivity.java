@@ -18,7 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.ver2.Converters;
 import com.example.ver2.R;
-import com.example.ver2.RecyclerViewTaskListAdapter;
+import com.example.ver2.recyclerViewClass.RecyclerViewTaskListAdapter;
 import com.example.ver2.dataClass.GoalDataViewModel;
 import com.example.ver2.dataClass.Task;
 import com.example.ver2.dataClass.goalManagement.Benchmarking;
@@ -160,23 +160,23 @@ public class ConfirmGoalActivity extends AppCompatActivity {
 
                 //オブジェクトに保存 ここで前のActivityに遷移
                 if (wcm != null) {
-                    wcm.setGoal(goal);
+                    wcm.updateGoal(goal);
                     Intent intent = new Intent(ConfirmGoalActivity.this, ConfirmWillCanMustActivity.class);
                     intent.putExtra("willCanMust", wcm);
                     startActivity(intent);
                 } else if (benchmarking != null) {
-                    benchmarking.setGoal(goal);
+                    benchmarking.updateGoal(goal);
                     Intent intent = new Intent(ConfirmGoalActivity.this, ConfirmBenchmarkingActivity.class);
                     intent.putExtra("benchmarking", benchmarking);
                     Log.d("Intent has benchmarking ConfirmGoalActivity", benchmarking.getName() + ":" + benchmarking.getDescription());
                     startActivity(intent);
                 } else if (smart != null) {
-                    smart.setGoal(goal);
+                    smart.updateGoal(goal);
                     Intent intent = new Intent(ConfirmGoalActivity.this, ConfirmSMARTActivity.class);
                     intent.putExtra("smart", smart);
                     startActivity(intent);
                 } else if (memo != null) {
-                    memo.setGoal(goal);
+                    memo.updateGoal(goal);
                     Intent intent = new Intent(ConfirmGoalActivity.this, ConfirmMemoGoalActivity.class);
                     intent.putExtra("memo_goal", memo);
                     startActivity(intent);
@@ -217,16 +217,16 @@ public class ConfirmGoalActivity extends AppCompatActivity {
 
                 //データベースに保存
                 if (wcm != null) {
-                    wcm.setGoal(goal);
+                    wcm.updateGoal(goal);
                     goalDataViewModel.updateWCM(wcm);
                 } else if (benchmarking != null) {
-                    benchmarking.setGoal(goal);
+                    benchmarking.updateGoal(goal);
                     goalDataViewModel.updateBenchmarking(benchmarking);
                 } else if (smart != null) {
-                    smart.setGoal(goal);
+                    smart.updateGoal(goal);
                     goalDataViewModel.updateSMART(smart);
                 } else if (memo != null) {
-                    memo.setGoal(goal);
+                    memo.updateGoal(goal);
                     goalDataViewModel.updateMemo_Goal(memo);
                 }
 

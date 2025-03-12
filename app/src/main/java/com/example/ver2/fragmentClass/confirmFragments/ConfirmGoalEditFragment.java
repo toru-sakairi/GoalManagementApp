@@ -15,7 +15,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.ver2.R;
-import com.example.ver2.RecyclerViewTaskListAdapter;
+import com.example.ver2.recyclerViewClass.RecyclerViewTaskListAdapter;
 import com.example.ver2.dataClass.GoalDataViewModel;
 import com.example.ver2.dataClass.Task;
 import com.example.ver2.dataClass.goalManagement.Goal;

@@ -1,18 +1,17 @@
-package com.example.ver2;
+package com.example.ver2.recyclerViewClass;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.TextView;
 
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.ver2.dataClass.AppDatabase;
+import com.example.ver2.BooleanUtils;
+import com.example.ver2.DateUtils;
+import com.example.ver2.R;
 import com.example.ver2.dataClass.GoalDataViewModel;
-import com.example.ver2.dataClass.Task;
 import com.example.ver2.dataClass.goalManagement.Goal;
 
 import java.util.ArrayList;

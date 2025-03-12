@@ -1,4 +1,4 @@
-package com.example.ver2;
+package com.example.ver2.recyclerViewClass;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,6 +7,7 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.ver2.R;
 import com.example.ver2.dataClass.Task;
 
 import java.util.List;

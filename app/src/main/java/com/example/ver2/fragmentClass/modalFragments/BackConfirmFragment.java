@@ -1,4 +1,4 @@
-package com.example.ver2.fragmentClass;
+package com.example.ver2.fragmentClass.modalFragments;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -12,6 +12,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
 import com.example.ver2.R;
+import com.example.ver2.fragmentClass.BackConfirmListener;
 
 public class BackConfirmFragment extends DialogFragment {
 

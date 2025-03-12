@@ -131,19 +131,19 @@ public class GoalDataViewModel extends AndroidViewModel {
     public void insertGoal(Goal goal, WillCanMust wcm, Benchmarking benchmarking, SMART smart, Memo_Goal memo) {
         executorService.execute(() -> {
             if (wcm != null) {
-                wcm.setGoal(goal);
+                wcm.updateGoal(goal);
                 wcm.setType(GoalType.WILL_CAN_MUST);
                 db.wcmDao().insert(wcm);
             } else if (benchmarking != null) {
-                benchmarking.setGoal(goal);
+                benchmarking.updateGoal(goal);
                 benchmarking.setType(GoalType.BENCHMARKING);
                 db.benchmarkingDao().insert(benchmarking);
             } else if (smart != null) {
-                smart.setGoal(goal);
+                smart.updateGoal(goal);
                 smart.setType(GoalType.SMART);
                 db.smartDao().insert(smart);
             } else if (memo != null) {
-                memo.setGoal(goal);
+                memo.updateGoal(goal);
                 memo.setType(GoalType.MEMO_GOAL);
                 db.memoGoalDao().insert(memo);
             }

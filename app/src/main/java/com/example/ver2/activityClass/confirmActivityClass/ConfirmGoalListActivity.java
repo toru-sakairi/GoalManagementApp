@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.ver2.R;
-import com.example.ver2.RecyclerViewGoalListAdapter;
+import com.example.ver2.recyclerViewClass.RecyclerViewGoalListAdapter;
 import com.example.ver2.dataClass.goalManagement.Benchmarking;
 import com.example.ver2.dataClass.goalManagement.Goal;
 import com.example.ver2.dataClass.GoalDataViewModel;

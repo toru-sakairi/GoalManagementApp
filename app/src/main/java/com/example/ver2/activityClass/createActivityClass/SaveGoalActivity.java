@@ -17,7 +17,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.ver2.RecyclerViewTaskListAdapter;
+import com.example.ver2.recyclerViewClass.RecyclerViewTaskListAdapter;
 import com.example.ver2.activityClass.MainActivity;
 import com.example.ver2.dataClass.GoalDataViewModel;
 import com.example.ver2.dataClass.goalManagement.GoalType;
@@ -128,13 +128,13 @@ public class SaveGoalActivity extends AppCompatActivity {
 
                 //データベースに保存
                 if (wcm != null) {
-                    wcm.setGoal(goal);
+                    wcm.updateGoal(goal);
                 } else if (benchmarking != null) {
-                    benchmarking.setGoal(goal);
+                    benchmarking.updateGoal(goal);
                 } else if (smart != null) {
-                    smart.setGoal(goal);
+                    smart.updateGoal(goal);
                 } else if (memo != null) {
-                    memo.setGoal(goal);
+                    memo.updateGoal(goal);
                 }
 
                 goalDataViewModel.insertGoal(goal, wcm, benchmarking, smart, memo);
@@ -164,22 +164,22 @@ public class SaveGoalActivity extends AppCompatActivity {
 
                 //オブジェクトに保存 ここで前のActivityに遷移
                 if (wcm != null) {
-                    wcm.setGoal(goal);
+                    wcm.updateGoal(goal);
                     Intent intent = new Intent(SaveGoalActivity.this, WillCanMustActivity.class);
                     intent.putExtra("willCanMust", wcm);
                     startActivity(intent);
                 } else if (benchmarking != null) {
-                    benchmarking.setGoal(goal);
+                    benchmarking.updateGoal(goal);
                     Intent intent = new Intent(SaveGoalActivity.this, BenchmarkingActivity.class);
                     intent.putExtra("benchmarking", benchmarking);
                     startActivity(intent);
                 } else if (smart != null) {
-                    smart.setGoal(goal);
+                    smart.updateGoal(goal);
                     Intent intent = new Intent(SaveGoalActivity.this, SMARTActivity.class);
                     intent.putExtra("smart", smart);
                     startActivity(intent);
                 } else if (memo != null) {
-                    memo.setGoal(goal);
+                    memo.updateGoal(goal);
                     Intent intent = new Intent(SaveGoalActivity.this, MemoGoalActivity.class);
                     intent.putExtra("memo_goal", memo);
                     startActivity(intent);
