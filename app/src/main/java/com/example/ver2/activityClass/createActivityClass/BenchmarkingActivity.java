@@ -1,8 +1,12 @@
+/*
+    ベンチマーキングフレームワークを利用した目標設定を行うActivity
+    このActivityの後はSaveGoalActivityで目標を保存する（目標の名前、詳細、作成日、開始日、終了日、タスクを入力するActivity）
+ */
+
 package com.example.ver2.activityClass.createActivityClass;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -28,6 +32,7 @@ public class BenchmarkingActivity extends AppCompatActivity{
         benchMarkEditText = findViewById(R.id.benchmarking_4_editText);
         compareEditText = findViewById(R.id.benchmarking_5_editText);
 
+        //SaveGoalActivityから戻ってきた際、始めに入力した情報を取得する --> 目標設定中はその情報をこのクラスとSaveGoalActivityクラスで保持する
         Intent intent = getIntent();
         if (intent != null && intent.hasExtra("benchmarking")) {
             benchmarking = intent.getParcelableExtra("benchmarking"); // "benchmarking" という Key で WillCanMust オブジェクトを取得
@@ -40,15 +45,15 @@ public class BenchmarkingActivity extends AppCompatActivity{
             }
         }
 
+        //BenchmarkingオブジェクトをSaveGoalActivityに送り、Activity遷移を行う
         Button saveButton = findViewById(R.id.benchmarking_saveButton);
-        saveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        saveButton.setOnClickListener(view ->  {
                 String goal = goalEditText.getText().toString();
                 String target = targetEditText.getText().toString();
                 String benchMark = benchMarkEditText.getText().toString();
                 String compare = compareEditText.getText().toString();
 
+                //始めの場合はここでインスタンス化する。二回目以降はBenchmarkingオブジェクトが保持してあるので、それを上書きする
                 if (benchmarking == null) {
                     benchmarking = new Benchmarking(goal, target, benchMark, compare);
                 } else {
@@ -58,19 +63,16 @@ public class BenchmarkingActivity extends AppCompatActivity{
                     benchmarking.setComparison(compare);
                 }
 
-                Intent intent = new Intent(BenchmarkingActivity.this, SaveGoalActivity.class);
-                intent.putExtra("benchmarking", benchmarking);
-                startActivity(intent);
-            }
+                Intent intent_next = new Intent(BenchmarkingActivity.this, SaveGoalActivity.class);
+                intent_next.putExtra("benchmarking", benchmarking);
+                startActivity(intent_next);
         });
 
+        //何もしないで前のActivityに遷移
         Button backButton = findViewById(R.id.benchmarking_backButton);
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(BenchmarkingActivity.this, CreateGoalChooseFrameworkActivity.class);
-                startActivity(intent);
-            }
+        backButton.setOnClickListener(view -> {
+                Intent intent_before = new Intent(BenchmarkingActivity.this, CreateGoalChooseFrameworkActivity.class);
+                startActivity(intent_before);
         });
 
     }

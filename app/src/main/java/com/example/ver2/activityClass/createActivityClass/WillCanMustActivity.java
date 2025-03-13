@@ -64,16 +64,16 @@ public class WillCanMustActivity extends AppCompatActivity {
                 willCanMust.setWcmGoal(goal);
             }
 
-            Intent intent1 = new Intent(WillCanMustActivity.this, SaveGoalActivity.class);
-            intent1.putExtra("willCanMust", willCanMust);
-            startActivity(intent1);
+            Intent intent_next = new Intent(WillCanMustActivity.this, SaveGoalActivity.class);
+            intent_next.putExtra("willCanMust", willCanMust);
+            startActivity(intent_next);
         });
 
         //何もしないで前のActivityに遷移
         Button backButton = findViewById(R.id.willCanMust_backButton);
         backButton.setOnClickListener(view -> {
-            Intent intent12 = new Intent(WillCanMustActivity.this, CreateGoalChooseFrameworkActivity.class);
-            startActivity(intent12);
+            Intent intent_before = new Intent(WillCanMustActivity.this, CreateGoalChooseFrameworkActivity.class);
+            startActivity(intent_before);
         });
     }
 }
