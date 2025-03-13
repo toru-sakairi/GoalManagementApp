@@ -46,12 +46,9 @@ public class CreateGoalChooseFrameworkActivity extends AppCompatActivity {
 
         //戻るボタン。目的か目標かを決めるActivityに遷移
         Button backButton = findViewById(R.id.create_goal_choose_frameWork_backButton);
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        backButton.setOnClickListener( view -> {
                 Intent intent = new Intent(CreateGoalChooseFrameworkActivity.this, CreateTopChooseActivity.class);
                 startActivity(intent);
-            }
         });
     }
 }
