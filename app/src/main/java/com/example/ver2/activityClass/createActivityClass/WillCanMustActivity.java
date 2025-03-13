@@ -1,8 +1,12 @@
+/*
+    WillCanMustフレームワークを利用した目標設定を行うActivity
+    このActivityの後はSaveGoalActivityで目標を保存する（目標の名前、詳細、作成日、開始日、終了日、タスクを入力するActivity）
+ */
+
 package com.example.ver2.activityClass.createActivityClass;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -16,6 +20,7 @@ public class WillCanMustActivity extends AppCompatActivity {
     private EditText canEditText;
     private EditText mustEditText;
     private EditText goalEditText;
+
     private WillCanMust willCanMust;
 
     @Override
@@ -27,6 +32,8 @@ public class WillCanMustActivity extends AppCompatActivity {
         canEditText = findViewById(R.id.WillCanMust_editText_Can);
         mustEditText = findViewById(R.id.WillCanMust_editText_Must);
         goalEditText = findViewById(R.id.WillCanMust_editText_Goal);
+
+        //SaveGoalActivityから戻ってきた際、始めに入力した情報を取得する --> 目標設定中はその情報をこのクラスとSaveGoalActivityクラスで保持する
         Intent intent = getIntent();
         if (intent != null && intent.hasExtra("willCanMust")) {
             willCanMust = intent.getParcelableExtra("willCanMust"); // "WillCanMust" という Key で WillCanMust オブジェクトを取得
@@ -39,37 +46,34 @@ public class WillCanMustActivity extends AppCompatActivity {
             }
         }
 
+        //WillCanMustオブジェクトをSaveGoalActivityに送り、Activity遷移を行う
         Button saveButton = findViewById(R.id.willCanMust_saveButton);
-        saveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String will = willEditText.getText().toString();
-                String can = canEditText.getText().toString();
-                String must = mustEditText.getText().toString();
-                String goal = goalEditText.getText().toString();
+        saveButton.setOnClickListener(view -> {
+            String will = willEditText.getText().toString();
+            String can = canEditText.getText().toString();
+            String must = mustEditText.getText().toString();
+            String goal = goalEditText.getText().toString();
 
-                if (willCanMust == null) {
-                    willCanMust = new WillCanMust(will, can, must, goal);
-                } else {
-                    willCanMust.setWill(will);
-                    willCanMust.setCan(can);
-                    willCanMust.setMust(must);
-                    willCanMust.setWcmGoal(goal);
-                }
-
-                Intent intent = new Intent(WillCanMustActivity.this, SaveGoalActivity.class);
-                intent.putExtra("willCanMust", willCanMust);
-                startActivity(intent);
+            //始めの場合はここでインスタンス化する。二回目以降はWillCanMustオブジェクトが保持してあるので、それを上書きする
+            if (willCanMust == null) {
+                willCanMust = new WillCanMust(will, can, must, goal);
+            } else {
+                willCanMust.setWill(will);
+                willCanMust.setCan(can);
+                willCanMust.setMust(must);
+                willCanMust.setWcmGoal(goal);
             }
+
+            Intent intent1 = new Intent(WillCanMustActivity.this, SaveGoalActivity.class);
+            intent1.putExtra("willCanMust", willCanMust);
+            startActivity(intent1);
         });
 
+        //何もしないで前のActivityに遷移
         Button backButton = findViewById(R.id.willCanMust_backButton);
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(WillCanMustActivity.this, CreateGoalChooseFrameworkActivity.class);
-                startActivity(intent);
-            }
+        backButton.setOnClickListener(view -> {
+            Intent intent12 = new Intent(WillCanMustActivity.this, CreateGoalChooseFrameworkActivity.class);
+            startActivity(intent12);
         });
     }
 }
