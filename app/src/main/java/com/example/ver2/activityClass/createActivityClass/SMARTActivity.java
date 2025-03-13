@@ -1,9 +1,12 @@
+/*
+    SMARTフレームワークを利用した目標設定を行うActivity
+    このActivityの後はSaveGoalActivityで目標を保存する（目標の名前、詳細、作成日、開始日、終了日、タスクを入力するActivity）
+ */
+
 package com.example.ver2.activityClass.createActivityClass;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -35,6 +38,7 @@ public class SMARTActivity extends AppCompatActivity {
         timeBoundEditText = findViewById(R.id.smart_scrollLayout_editText_timeBound);
         goalEditText = findViewById(R.id.smart_scrollLayout_editText_goal);
 
+        //SaveGoalActivityから戻ってきた際、前に入力した情報を取得する --> 目標設定中はその情報をこのクラスとSaveGoalActivityクラスで保持する
         Intent intent = getIntent();
         if (intent != null && intent.hasExtra("smart")) {
             smart = intent.getParcelableExtra("smart"); // "WillCanMust" という Key で WillCanMust オブジェクトを取得
@@ -49,10 +53,9 @@ public class SMARTActivity extends AppCompatActivity {
             }
         }
 
+        //SMARTオブジェクトをSaveGoalActivityに送り、Activity遷移を行う
         Button saveButton = findViewById(R.id.smart_saveButton);
-        saveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        saveButton.setOnClickListener(view -> {
                 String specific = specificEditText.getText().toString();
                 String measurable = measurableEditText.getText().toString();
                 String achievable = achievableEditText.getText().toString();
@@ -60,6 +63,7 @@ public class SMARTActivity extends AppCompatActivity {
                 String timeBound = timeBoundEditText.getText().toString();
                 String goal = goalEditText.getText().toString();
 
+                //始めの場合はここでインスタンス化する。二回目以降はSMARTオブジェクトが保持してあるので、それを上書きする
                 if (smart == null) {
                     smart = new SMART(specific,measurable,achievable,relevant,timeBound,goal);
                 } else {
@@ -71,19 +75,16 @@ public class SMARTActivity extends AppCompatActivity {
                     smart.setSmartGoal(goal);
                 }
 
-                Intent intent = new Intent(SMARTActivity.this, SaveGoalActivity.class);
-                intent.putExtra("smart", smart);
-                startActivity(intent);
-            }
+                Intent intent_next = new Intent(SMARTActivity.this, SaveGoalActivity.class);
+                intent_next.putExtra("smart", smart);
+                startActivity(intent_next);
         });
 
+        //何もしないで前のActivityに遷移
         Button backButton = findViewById(R.id.smart_backButton);
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(SMARTActivity.this, CreateGoalChooseFrameworkActivity.class);
-                startActivity(intent);
-            }
+        backButton.setOnClickListener(view -> {
+                Intent intent_before = new Intent(SMARTActivity.this, CreateGoalChooseFrameworkActivity.class);
+                startActivity(intent_before);
         });
 
     }

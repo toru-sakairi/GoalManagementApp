@@ -32,7 +32,7 @@ public class BenchmarkingActivity extends AppCompatActivity{
         benchMarkEditText = findViewById(R.id.benchmarking_4_editText);
         compareEditText = findViewById(R.id.benchmarking_5_editText);
 
-        //SaveGoalActivityから戻ってきた際、始めに入力した情報を取得する --> 目標設定中はその情報をこのクラスとSaveGoalActivityクラスで保持する
+        //SaveGoalActivityから戻ってきた際、前に入力した情報を取得する --> 目標設定中はその情報をこのクラスとSaveGoalActivityクラスで保持する
         Intent intent = getIntent();
         if (intent != null && intent.hasExtra("benchmarking")) {
             benchmarking = intent.getParcelableExtra("benchmarking"); // "benchmarking" という Key で WillCanMust オブジェクトを取得

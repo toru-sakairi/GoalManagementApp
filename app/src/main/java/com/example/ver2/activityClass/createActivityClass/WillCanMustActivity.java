@@ -33,7 +33,7 @@ public class WillCanMustActivity extends AppCompatActivity {
         mustEditText = findViewById(R.id.WillCanMust_editText_Must);
         goalEditText = findViewById(R.id.WillCanMust_editText_Goal);
 
-        //SaveGoalActivityから戻ってきた際、始めに入力した情報を取得する --> 目標設定中はその情報をこのクラスとSaveGoalActivityクラスで保持する
+        //SaveGoalActivityから戻ってきた際、前に入力した情報を取得する --> 目標設定中はその情報をこのクラスとSaveGoalActivityクラスで保持する
         Intent intent = getIntent();
         if (intent != null && intent.hasExtra("willCanMust")) {
             willCanMust = intent.getParcelableExtra("willCanMust"); // "WillCanMust" という Key で WillCanMust オブジェクトを取得
