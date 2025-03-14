@@ -1,3 +1,8 @@
+/*
+    RoomDatabaseを継承した抽象クラス。データベースの定義とアクセスを提供
+
+ */
+
 package com.example.ver2.dataClass;
 
 import android.content.Context;
@@ -30,6 +35,7 @@ public abstract class AppDatabase extends RoomDatabase {
 
     private static volatile AppDatabase INSTANCE;
 
+    //シングルトンパターンでアプリ全体で共有する
     public static AppDatabase getInstance(Context context) {
         if (INSTANCE == null) {
             synchronized (AppDatabase.class) {
