@@ -1,15 +1,19 @@
+/*
+    GoalやPurposeに使用されるTaskクラス。これは単体ではデータベースに保存しない。
+    Goalクラスなどに含まれて保存される
+ */
+
 package com.example.ver2.dataClass;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.example.ver2.Converters;
-import com.example.ver2.dataClass.goalManagement.Benchmarking;
 
-import java.io.Serializable;
 import java.util.Date;
 
 public class Task implements Parcelable {
+    //taskの順番ごとにIDをつけている
     private int ID;
     private String name;
     private String description;
@@ -18,6 +22,7 @@ public class Task implements Parcelable {
     private Date finishDate;
     private boolean state;
 
+    //コンストラクタ
     public Task(int ID, String name,String description,Date createDate,Date startDate,Date finishDate,boolean state)
     {
         this.ID = ID;
@@ -29,49 +34,51 @@ public class Task implements Parcelable {
         this.state = state;
     }
 
+    //ゲッター＆セッター
     public int getID(){
         return ID;
-    }
-    public String getName(){
-        return name;
-    }
-    public String getDescription(){
-        return description;
-    }
-    public Date getCreateDate(){
-        return createDate;
-    }
-    public Date getStartDate(){
-        return startDate;
-    }
-    public Date getFinishDate(){
-        return finishDate;
-    }
-    public boolean getState(){
-        return state;
     }
     public void setID(int ID){
         this.ID = ID;
     }
+    public String getName(){
+        return name;
+    }
     public void setName(String name){
         this.name = name;
+    }
+    public String getDescription(){
+        return description;
     }
     public void setDescription(String description){
         this.description = description;
     }
+    public Date getCreateDate(){
+        return createDate;
+    }
     public void setCreateDate(Date createDate){
         this.createDate = createDate;
+    }
+    public Date getStartDate(){
+        return startDate;
     }
     public void setStartDate(Date startDate){
         this.startDate = startDate;
     }
+    public Date getFinishDate(){
+        return finishDate;
+    }
     public void setFinishDate(Date finishDate){
         this.finishDate = finishDate;
+    }
+    public boolean getState(){
+        return state;
     }
     public void setState(boolean state){
         this.state = state;
     }
 
+    //Parcelableオブジェクトの管理
     @Override
     public int describeContents() {
         return 0;
@@ -112,7 +119,6 @@ public class Task implements Parcelable {
         public Task createFromParcel(Parcel in) {
             return new Task(in);
         }
-
         @Override
         public Task[] newArray(int size) {
             return new Task[size];
