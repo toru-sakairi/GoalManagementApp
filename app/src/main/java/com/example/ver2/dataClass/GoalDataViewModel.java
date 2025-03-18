@@ -76,7 +76,7 @@ public class GoalDataViewModel extends AndroidViewModel {
         });
     }
 
-    //ゲッター。それぞれのクラスごとに分けて、idを用いて検索 LiveDataで返している。
+    //ゲッター。それぞれのクラスごとに分けて、idを用いて検索 LiveDataで返している(外部から変更されないため)。
     public LiveData<SMART> getSMARTByID(int id) {
         return db.smartDao().getSMARTById(id);
     }

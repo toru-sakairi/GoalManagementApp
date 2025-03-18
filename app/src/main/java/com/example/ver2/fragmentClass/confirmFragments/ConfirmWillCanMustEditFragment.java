@@ -1,6 +1,7 @@
 package com.example.ver2.fragmentClass.confirmFragments;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,6 +55,9 @@ public class ConfirmWillCanMustEditFragment extends DialogFragment {
                 wcm.setCan(canEditText.getText().toString());
                 wcm.setMust(mustEditText.getText().toString());
                 wcm.setWcmGoal(goalEditText.getText().toString());
+
+                //この時点でwcmのWCMGoalが設定されていない
+                Log.d("WCMGoal Debug",goalEditText.getText().toString());
 
                 viewModel.callActivityMethod_updateTextView(wcm);
 

@@ -60,7 +60,7 @@ public class WillCanMust extends Goal implements Parcelable {
     public String getMust(){ return must; }
     public void setMust(String must){ this.must = must; }
     public String getWcmGoal(){ return wcmGoal; }
-    public void setWcmGoal(String wcmGoal){ this.wcmGoal = this.wcmGoal; }
+    public void setWcmGoal(String wcmGoal){ this.wcmGoal = wcmGoal; }
 
     // Parcelable の実装
     //オブジェクトがどのような種類のコンテンツを含んでいるか記述する。ほとんどの場合0を返す。

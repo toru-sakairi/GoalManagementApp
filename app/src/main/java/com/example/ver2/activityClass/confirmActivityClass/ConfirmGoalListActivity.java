@@ -1,3 +1,8 @@
+/*
+    目標を一覧するActivityクラス。RecyclerViewでGoalオブジェクトをリストとして表示。
+    リストの中の一つをタップすると、その目標の内容を確認できる。
+ */
+
 package com.example.ver2.activityClass.confirmActivityClass;
 
 import android.content.Intent;
@@ -25,7 +30,6 @@ import java.util.List;
 
 public class ConfirmGoalListActivity extends AppCompatActivity {
     private List<Goal> goalList = new ArrayList<>(); // 初期化しておく
-    private RecyclerView recyclerView;
     private RecyclerViewGoalListAdapter adapter;
     private GoalDataViewModel goalDataViewModel;
 
@@ -34,10 +38,11 @@ public class ConfirmGoalListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.confirm_goal_list);
 
-        recyclerView = findViewById(R.id.confirm_goal_lists_RecyclerView);
+        RecyclerView recyclerView = findViewById(R.id.confirm_goal_lists_RecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         goalDataViewModel = new ViewModelProvider(this).get(GoalDataViewModel.class);
+        //goalDataViewModelから得られるデータはLiveDataで、これを監視することで変更された際UIに通知する。
         goalDataViewModel.getAllGoals().observe(this, goals -> {
             goalList.clear();
             goalList.addAll(goals);
@@ -48,7 +53,7 @@ public class ConfirmGoalListActivity extends AppCompatActivity {
         adapter = new RecyclerViewGoalListAdapter(goalList, goalDataViewModel);
         recyclerView.setAdapter(adapter);
 
-        // データ取得開始
+        // データ取得開始:
         goalDataViewModel.loadGoalListFromDatabase();
 
         //RecyclerViewのクリックの実装
@@ -63,10 +68,10 @@ public class ConfirmGoalListActivity extends AppCompatActivity {
                         Intent intent = new Intent(ConfirmGoalListActivity.this, ConfirmSMARTActivity.class);
                         LiveData<SMART> smartLiveData = goalDataViewModel.getSMARTByID(clickedGoal.getID());
                         smartLiveData.observe(ConfirmGoalListActivity.this, smart -> {
-                            if(smart != null){
-                                intent.putExtra("smart",smart);
+                            if (smart != null) {
+                                intent.putExtra("smart", smart);
                                 startActivity(intent);
-                            }else{
+                            } else {
 
                             }
                         });
@@ -76,11 +81,11 @@ public class ConfirmGoalListActivity extends AppCompatActivity {
                     case WILL_CAN_MUST: {
                         Intent intent = new Intent(ConfirmGoalListActivity.this, ConfirmWillCanMustActivity.class);
                         LiveData<WillCanMust> wcmLiveData = goalDataViewModel.getWCMByID(clickedGoal.getID());
-                        wcmLiveData.observe(ConfirmGoalListActivity.this, wcm ->{
-                            if(wcm != null){
+                        wcmLiveData.observe(ConfirmGoalListActivity.this, wcm -> {
+                            if (wcm != null) {
                                 intent.putExtra("willCanMust", wcm);
                                 startActivity(intent);
-                            }else{
+                            } else {
 
                             }
                         });
@@ -90,10 +95,10 @@ public class ConfirmGoalListActivity extends AppCompatActivity {
                         Intent intent = new Intent(ConfirmGoalListActivity.this, ConfirmBenchmarkingActivity.class);
                         LiveData<Benchmarking> benchmarkingLiveData = goalDataViewModel.getBenchmarkingByID(clickedGoal.getID());
                         benchmarkingLiveData.observe(ConfirmGoalListActivity.this, benchmarking -> {
-                            if(benchmarking != null){
+                            if (benchmarking != null) {
                                 intent.putExtra("benchmarking", benchmarking);
                                 startActivity(intent);
-                            }else {
+                            } else {
 
                             }
                         });
@@ -103,10 +108,10 @@ public class ConfirmGoalListActivity extends AppCompatActivity {
                         Intent intent = new Intent(ConfirmGoalListActivity.this, ConfirmMemoGoalActivity.class);
                         LiveData<Memo_Goal> memoLiveData = goalDataViewModel.getMemoGoalByID(clickedGoal.getID());
                         memoLiveData.observe(ConfirmGoalListActivity.this, memo -> {
-                            if(memo != null){
+                            if (memo != null) {
                                 intent.putExtra("memo_goal", memo);
                                 startActivity(intent);
-                            }else{
+                            } else {
 
                             }
                         });
@@ -127,6 +132,4 @@ public class ConfirmGoalListActivity extends AppCompatActivity {
             }
         });
     }
-
-
 }
