@@ -71,7 +71,7 @@ public class SaveGoalActivity extends AppCompatActivity {
             if (intent.hasExtra("willCanMust")) {
                 wcm = intent.getParcelableExtra("willCanMust");
                 //二回目にこのクラスに遷移した際に前に入力した情報を保持するためのコード。初めての場合はここで初めてインスタンス化する
-                if (wcm != null && wcm.isGoalExist() ) {
+                if (wcm != null && wcm.isGoalExist()) {
                     goal = new Goal(wcm.getName(), wcm.getDescription(), wcm.getCreateDate(), wcm.getStartDate(), wcm.getFinishDate(), wcm.isState(), wcm.getTasks(), wcm.getType());
                 } else {
                     goal = new Goal(null, null, null, null, null, false, null, GoalType.WILL_CAN_MUST);
@@ -112,73 +112,73 @@ public class SaveGoalActivity extends AppCompatActivity {
         //データベースに保存する
         Button saveButton = findViewById(R.id.saveGoalButton);
         saveButton.setOnClickListener(view -> {
-                String goalName = goalNameEditText.getText().toString();
-                String goalDescription = goalDescriptionEditText.getText().toString();
+            String goalName = goalNameEditText.getText().toString();
+            String goalDescription = goalDescriptionEditText.getText().toString();
 
-                //goalの中身を設定
-                goal.setName(goalName);
-                goal.setDescription(goalDescription);
-                goal.setCreateDate(new Date());
-                goal.setStartDate(startDate);
-                goal.setFinishDate(finishDate);
-                goal.setState(false);
-                goal.setTasks(taskList);
+            //goalの中身を設定
+            goal.setName(goalName);
+            goal.setDescription(goalDescription);
+            goal.setCreateDate(new Date());
+            goal.setStartDate(startDate);
+            goal.setFinishDate(finishDate);
+            goal.setState(false);
+            goal.setTasks(taskList);
 
-                //それぞれのサブクラスのスーパークラスの属性を上書きする
-                if (wcm != null) {
-                    wcm.updateGoal(goal);
-                } else if (benchmarking != null) {
-                    benchmarking.updateGoal(goal);
-                } else if (smart != null) {
-                    smart.updateGoal(goal);
-                } else if (memo != null) {
-                    memo.updateGoal(goal);
-                }
+            //それぞれのサブクラスのスーパークラスの属性を上書きする
+            if (wcm != null) {
+                wcm.updateGoal(goal);
+            } else if (benchmarking != null) {
+                benchmarking.updateGoal(goal);
+            } else if (smart != null) {
+                smart.updateGoal(goal);
+            } else if (memo != null) {
+                memo.updateGoal(goal);
+            }
 
-                //データベースに保存。引数は5つで、goalはupdateGoal(goal)に使用、そのほか4つはnullチェックを用いたViewModel側での処理
-                goalDataViewModel.insertGoal(goal, wcm, benchmarking, smart, memo);
+            //データベースに保存。引数は5つで、goalはupdateGoal(goal)に使用、そのほか4つはnullチェックを用いたViewModel側での処理
+            goalDataViewModel.insertGoal(goal, wcm, benchmarking, smart, memo);
 
-                //ホームに戻る
-                Intent intent_next = new Intent(SaveGoalActivity.this, MainActivity.class);
-                startActivity(intent_next);
+            //ホームに戻る
+            Intent intent_next = new Intent(SaveGoalActivity.this, MainActivity.class);
+            startActivity(intent_next);
         });
 
         //前のActivityに遷移する。現在目標設定中のクラスの種類ごとに別れる。
         Button backButton = findViewById(R.id.backButton_saveGoallayout);
-        backButton.setOnClickListener( view -> {
-                String goalName = goalNameEditText.getText().toString();
-                String goalDescription = goalDescriptionEditText.getText().toString();
+        backButton.setOnClickListener(view -> {
+            String goalName = goalNameEditText.getText().toString();
+            String goalDescription = goalDescriptionEditText.getText().toString();
 
-                //goalのアップデート
-                goal.setName(goalName);
-                goal.setDescription(goalDescription);
-                goal.setCreateDate(new Date());
-                goal.setStartDate(startDate);
-                goal.setFinishDate(finishDate);
-                goal.setState(false);
-                goal.setTasks(taskList);
+            //goalのアップデート
+            goal.setName(goalName);
+            goal.setDescription(goalDescription);
+            goal.setCreateDate(new Date());
+            goal.setStartDate(startDate);
+            goal.setFinishDate(finishDate);
+            goal.setState(false);
+            goal.setTasks(taskList);
 
-                //オブジェクトに保存 ここで前のActivityに遷移
-                if (wcm != null) {
-                    wcm.updateGoal(goal);
-                    Intent intent_before = new Intent(SaveGoalActivity.this, WillCanMustActivity.class);
-                    intent_before.putExtra("willCanMust", wcm);
-                    startActivity(intent_before);
-                } else if (benchmarking != null) {
-                    benchmarking.updateGoal(goal);
-                    Intent intent_before = new Intent(SaveGoalActivity.this, BenchmarkingActivity.class);
-                    intent_before.putExtra("benchmarking", benchmarking);
-                    startActivity(intent);
-                } else if (smart != null) {
-                    smart.updateGoal(goal);
-                    Intent intent_before = new Intent(SaveGoalActivity.this, SMARTActivity.class);
-                    intent_before.putExtra("smart", smart);
-                    startActivity(intent);
-                } else if (memo != null) {
-                    memo.updateGoal(goal);
-                    Intent intent_before = new Intent(SaveGoalActivity.this, MemoGoalActivity.class);
-                    intent_before.putExtra("memo_goal", memo);
-                    startActivity(intent);
+            //オブジェクトに保存 ここで前のActivityに遷移
+            if (wcm != null) {
+                wcm.updateGoal(goal);
+                Intent intent_before = new Intent(SaveGoalActivity.this, WillCanMustActivity.class);
+                intent_before.putExtra("willCanMust", wcm);
+                startActivity(intent_before);
+            } else if (benchmarking != null) {
+                benchmarking.updateGoal(goal);
+                Intent intent_before = new Intent(SaveGoalActivity.this, BenchmarkingActivity.class);
+                intent_before.putExtra("benchmarking", benchmarking);
+                startActivity(intent);
+            } else if (smart != null) {
+                smart.updateGoal(goal);
+                Intent intent_before = new Intent(SaveGoalActivity.this, SMARTActivity.class);
+                intent_before.putExtra("smart", smart);
+                startActivity(intent);
+            } else if (memo != null) {
+                memo.updateGoal(goal);
+                Intent intent_before = new Intent(SaveGoalActivity.this, MemoGoalActivity.class);
+                intent_before.putExtra("memo_goal", memo);
+                startActivity(intent);
             }
         });
 
@@ -205,7 +205,7 @@ public class SaveGoalActivity extends AppCompatActivity {
                 startDatePicker.updateDate(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
                 //日付をこのクラスの変数にアタッチしておく
                 startDate = goal.getStartDate();
-            }else{
+            } else {
                 //nullだった場合は、現在の日付を入れておく
                 startDate = calendar.getTime();
             }
@@ -213,7 +213,7 @@ public class SaveGoalActivity extends AppCompatActivity {
                 calendar.setTime(goal.getFinishDate());
                 finishDatePicker.updateDate(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
                 finishDate = goal.getFinishDate();
-            }else{
+            } else {
                 finishDate = calendar.getTime();
             }
         }
@@ -289,6 +289,8 @@ public class SaveGoalActivity extends AppCompatActivity {
         if (adapter != null) {
             adapter.notifyDataSetChanged();
         }
+
+        logTasks();
     }
 
     //タスクを探すメソッド openChangeTaskFragmentで使用
@@ -323,6 +325,13 @@ public class SaveGoalActivity extends AppCompatActivity {
         RecyclerViewTaskListAdapter adapter = (RecyclerViewTaskListAdapter) taskRecyclerView.getAdapter();
         if (adapter != null) {
             adapter.notifyDataSetChanged();
+        }
+    }
+
+    private void logTasks() {
+        for (Task task : taskList) {
+            Log.d("task description", "ID:" + task.getID() + " NAME:" + task.getName() + " DESCRIPTION:" + task.getDescription());
+            Log.d("task description", "createDate:" + task.getCreateDate() + " startDate:" + task.getStartDate() + " finishDate:" + task.getFinishDate());
         }
     }
 }

@@ -6,7 +6,7 @@ package com.example.ver2.dataClass.goalManagement;
 
 public enum GoalType {
     SMART("SMART"),
-    BENCHMARKING("ベンチマーキング"),
+    BENCHMARKING("benchmarking"),
     WILL_CAN_MUST("WillCanMust"),
     MEMO_GOAL("メモ"),
     GOAL("goal");

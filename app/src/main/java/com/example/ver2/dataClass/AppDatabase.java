@@ -24,7 +24,7 @@ import com.example.ver2.dataClass.goalManagement.SMARTDao;
 import com.example.ver2.dataClass.goalManagement.WillCanMust;
 import com.example.ver2.dataClass.goalManagement.WillCanMustDao;
 
-@Database(entities = {Goal.class,WillCanMust.class, SMART.class, Memo_Goal.class, Benchmarking.class}, version = 4, exportSchema = false)
+@Database(entities = {Goal.class,WillCanMust.class, SMART.class, Memo_Goal.class, Benchmarking.class}, version = 5, exportSchema = false)
 @TypeConverters({Converters.class}) // TypeConverter を指定
 public abstract class AppDatabase extends RoomDatabase {
     public abstract GoalDao goalDao();

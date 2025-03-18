@@ -2,6 +2,7 @@ package com.example.ver2.fragmentClass;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,7 +48,7 @@ public class AddTaskFragment extends DialogFragment {
 
         Bundle bundle = getArguments();
 
-        //新規の場合
+        //ChangeTaskの場合
         if (bundle != null) {
             task = bundle.getParcelable("changeTask");
             if (task != null) {
@@ -70,7 +71,8 @@ public class AddTaskFragment extends DialogFragment {
         }else{
             //新規の場合はここでTaskを作成
             changeFlag = false;
-            task = new Task(viewModel.callActivityMethod_getTaskNum(), null,null,new Date(),null,null,false);
+            //　3/18 13:50 ここのコンストラクタのStartDateとFinishDateをnew Date()　で入れた。
+            task = new Task(viewModel.callActivityMethod_getTaskNum(), null,null,new Date(),new Date(),new Date(),false);
         }
 
         // DatePicker のリスナー設定 (API レベル 26 以上)
@@ -98,6 +100,9 @@ public class AddTaskFragment extends DialogFragment {
             task.setCreateDate(new Date());
             task.setStartDate(taskStartDate);
             task.setFinishDate(taskFinishDate);
+
+            Log.d("Task", "Task - ID: " + task.getID() + ", name: " + task.getName() + ", state: " + task.getState());
+            Log.d("Task", "createDate: " + task.getCreateDate() + ", startDate: " + task.getStartDate() + ", finishDate: " + task.getFinishDate());
 
             //上書か新規保存か(ChangeTask() か　AddTask()　か)
             if (changeFlag) {

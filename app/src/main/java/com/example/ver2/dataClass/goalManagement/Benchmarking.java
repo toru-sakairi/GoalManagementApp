@@ -13,8 +13,6 @@ import androidx.room.Ignore;
 
 import com.example.ver2.dataClass.Task;
 
-import java.io.Serializable;
-import java.lang.reflect.ParameterizedType;
 import java.util.Date;
 import java.util.List;
 

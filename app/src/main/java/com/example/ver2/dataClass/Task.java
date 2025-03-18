@@ -5,8 +5,11 @@
 
 package com.example.ver2.dataClass;
 
+import static java.lang.String.valueOf;
+
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 import com.example.ver2.Converters;
 
@@ -23,8 +26,7 @@ public class Task implements Parcelable {
     private boolean state;
 
     //コンストラクタ
-    public Task(int ID, String name,String description,Date createDate,Date startDate,Date finishDate,boolean state)
-    {
+    public Task(int ID, String name, String description, Date createDate, Date startDate, Date finishDate, boolean state) {
         this.ID = ID;
         this.name = name;
         this.description = description;
@@ -35,46 +37,59 @@ public class Task implements Parcelable {
     }
 
     //ゲッター＆セッター
-    public int getID(){
+    public int getID() {
         return ID;
     }
-    public void setID(int ID){
+
+    public void setID(int ID) {
         this.ID = ID;
     }
-    public String getName(){
+
+    public String getName() {
         return name;
     }
-    public void setName(String name){
+
+    public void setName(String name) {
         this.name = name;
     }
-    public String getDescription(){
+
+    public String getDescription() {
         return description;
     }
-    public void setDescription(String description){
+
+    public void setDescription(String description) {
         this.description = description;
     }
-    public Date getCreateDate(){
+
+    public Date getCreateDate() {
         return createDate;
     }
-    public void setCreateDate(Date createDate){
+
+    public void setCreateDate(Date createDate) {
         this.createDate = createDate;
     }
-    public Date getStartDate(){
+
+    public Date getStartDate() {
         return startDate;
     }
-    public void setStartDate(Date startDate){
+
+    public void setStartDate(Date startDate) {
         this.startDate = startDate;
     }
-    public Date getFinishDate(){
+
+    public Date getFinishDate() {
         return finishDate;
     }
-    public void setFinishDate(Date finishDate){
+
+    public void setFinishDate(Date finishDate) {
         this.finishDate = finishDate;
     }
-    public boolean getState(){
+
+    public boolean getState() {
         return state;
     }
-    public void setState(boolean state){
+
+    public void setState(boolean state) {
         this.state = state;
     }
 
@@ -91,26 +106,48 @@ public class Task implements Parcelable {
         dest.writeString(description);
 //Serializableだと互換性がなくバグの原因になるため。また、始めにGoalをインスタンス化する際はすべてnullだからnullの場合の初期値を設定する必要がある
         Long createDateTimestamp = Converters.dateToTimestamp(createDate);
-        dest.writeLong(createDateTimestamp != null ? createDateTimestamp : 0L);
-
         Long startDateTimestamp = Converters.dateToTimestamp(startDate);
-        dest.writeLong(startDateTimestamp != null ? startDateTimestamp : 0L);
-
         Long finishDateTimestamp = Converters.dateToTimestamp(finishDate);
-        dest.writeLong(finishDateTimestamp != null ? finishDateTimestamp : 0L);
+
+        //ここでは正常
+//        Log.d("Task_Times Debug","createDate : " + valueOf(createDateTimestamp));
+//        Log.d("Task_Times Debug","startDate : " + valueOf(startDateTimestamp));
+//        Log.d("Task_Times Debug","finishDate : " + valueOf(finishDateTimestamp));
+
+        // 3/18 13:40 ここのNullチェックを-1とした。0だと1970年~~~みたいになるらしい
+        dest.writeLong(createDateTimestamp != null ? createDateTimestamp : -1L);
+        dest.writeLong(startDateTimestamp != null ? startDateTimestamp : -1L);
+        dest.writeLong(finishDateTimestamp != null ? finishDateTimestamp : -1L);
+
+        Log.d("Task_Times Debug", "createDate : " + valueOf(createDateTimestamp));
+        Log.d("Task_Times Debug", "startDate : " + valueOf(startDateTimestamp));
+        Log.d("Task_Times Debug", "finishDate : " + valueOf(finishDateTimestamp));
 
         dest.writeByte((byte) (state ? 1 : 0));
 
     }
 
-    protected Task(Parcel in){
+    protected Task(Parcel in) {
         ID = in.readInt();
         name = in.readString();
         description = in.readString();
-        createDate = Converters.fromTimestamp(in.readLong());
-        startDate = Converters.fromTimestamp(in.readLong());
-        finishDate = Converters.fromTimestamp(in.readLong());
+        //3/18 13:40
+        long createDateMillis = in.readLong();
+        long startDateMillis = in.readLong();
+        long finishDateMillis = in.readLong();
+
+        Log.d("Task_LongDateConvert(create)", valueOf(createDateMillis));
+        Log.d("Task_LongDateConvert(start)", valueOf(startDateMillis));
+        Log.d("Task_LongDateConvert(finish)", valueOf(finishDateMillis));
+
+        createDate = (createDateMillis != -1L) ? Converters.fromTimestamp(createDateMillis) : null;
+        startDate = (startDateMillis != -1L) ? Converters.fromTimestamp(startDateMillis) : null;
+        finishDate = (finishDateMillis != -1L) ? Converters.fromTimestamp(finishDateMillis) : null;
+
         state = in.readByte() != 0;
+
+        Log.d("Task", "Task - ID: " + ID + ", name: " + name + ", state: " + state);
+        Log.d("Task", "createDate: " + createDate + ", startDate: " + startDate + ", finishDate: " + finishDate);
     }
 
     //Parcelableオブジェクトを生成するためのCreatorを定義
@@ -119,6 +156,7 @@ public class Task implements Parcelable {
         public Task createFromParcel(Parcel in) {
             return new Task(in);
         }
+
         @Override
         public Task[] newArray(int size) {
             return new Task[size];

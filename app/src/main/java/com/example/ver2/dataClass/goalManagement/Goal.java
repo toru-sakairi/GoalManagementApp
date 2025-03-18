@@ -4,8 +4,11 @@
 
 package com.example.ver2.dataClass.goalManagement;
 
+import static java.lang.String.valueOf;
+
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 import androidx.room.Entity;
 import androidx.room.Ignore;
@@ -72,33 +75,78 @@ public class Goal implements Parcelable {
     }
 
     // ゲッター&セッター
-    public int getID() { return ID; }
+    public int getID() {
+        return ID;
+    }
+
     //IDのセッターは必要ない可能性あり
-    public void setID(int ID) { this.ID = ID; }
+    public void setID(int ID) {
+        this.ID = ID;
+    }
 
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
+    public String getName() {
+        return name;
+    }
 
-    public String getDescription() { return description; }
-    public void setDescription(String description) { this.description = description; }
+    public void setName(String name) {
+        this.name = name;
+    }
 
-    public Date getCreateDate() { return createDate; }
-    public void setCreateDate(Date createDate) { this.createDate = createDate; }
+    public String getDescription() {
+        return description;
+    }
 
-    public Date getStartDate() { return startDate; }
-    public void setStartDate(Date startDate) { this.startDate = startDate; }
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-    public Date getFinishDate() { return finishDate; }
-    public void setFinishDate(Date finishDate) { this.finishDate = finishDate; }
+    public Date getCreateDate() {
+        return createDate;
+    }
 
-    public boolean isState() { return state; }
-    public void setState(boolean state) { this.state = state; }
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
 
-    public List<Task> getTasks() { return tasks; }
-    public void setTasks(List<Task> tasks) { this.tasks = tasks != null ? tasks : new ArrayList<>(); }
+    public Date getStartDate() {
+        return startDate;
+    }
 
-    public GoalType getType() { return type; }
-    public void setType(GoalType type) { this.type = type; }
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+
+    public Date getFinishDate() {
+        return finishDate;
+    }
+
+    public void setFinishDate(Date finishDate) {
+        this.finishDate = finishDate;
+    }
+
+    public boolean isState() {
+        return state;
+    }
+
+    public void setState(boolean state) {
+        this.state = state;
+    }
+
+    public List<Task> getTasks() {
+        return tasks;
+    }
+
+    public void setTasks(List<Task> tasks) {
+        this.tasks = tasks != null ? tasks : new ArrayList<>();
+    }
+
+    public GoalType getType() {
+        return type;
+    }
+
+    public void setType(GoalType type) {
+        this.type = type;
+    }
 
     //今のところActivity遷移で使う
     public boolean isGoalExist() {
@@ -150,10 +198,15 @@ public class Goal implements Parcelable {
         dest.writeLong(finishDateTimestamp != null ? finishDateTimestamp : 0L);
 
         dest.writeByte((byte) (state ? 1 : 0));
-        dest.writeList(tasks); // Task クラスも Parcelable であること
+
+        // 3/18 14:50  ListをParcelでやる場合、writeList()とwriteTypedList()がある。受け取り側もこれに合わせて書かなくちゃ行けない
+        //dest.writeList(tasks); // Task クラスも Parcelable であること
+        dest.writeTypedList(tasks); // 修正
+
         //Intentで情報が送られない問題(ConfirmGoalActivityとConfirmBenchmarkingActivityの間の問題：EnumをIntで送る)
         //.ordinal():列挙型の各定数が定義された順番に対応する序数（インデックス）を返すメソッド
-        dest.writeInt(type == null ? -1 : type.ordinal()); // enum の序数を書き込む (null の場合は -1)
+        //dest.writeInt(type == null ? -1 : type.ordinal()); // enum の序数を書き込む (null の場合は -1)
+        dest.writeString(type == null ? null : type.name());
     }
 
     protected Goal(Parcel in) {
@@ -164,12 +217,19 @@ public class Goal implements Parcelable {
         startDate = Converters.fromTimestamp(in.readLong());
         finishDate = Converters.fromTimestamp(in.readLong());
         state = in.readByte() != 0;
+
         //createTypedArrayList():Parcelに書き込まれたParcelableオブジェクトのリストを復元する。ParcelからParcelableオブジェクトのArrayListを読み取るために使用。ジェネリック型TのArrayListを返し、Parcelable.Creator<T>を引数として受け取る
         tasks = in.createTypedArrayList(Task.CREATOR); // Task クラスも Parcelable であること
+        //tasks = new ArrayList<>();
+        //in.readList(tasks, Task.class.getClassLoader());
+
         //Intentで情報が送られない問題(ConfirmGoalActivityとConfirmBenchmarkingActivityの間の問題：EnumをIntでもらう)
         //.values():Enumのすべての値を配列として返す。　in.readInt():ParcelからEnumの序数を読み取る。 .values()[]:配列から指定された序数の要素を取得
-        int typeOrdinal = in.readInt();
-        type = (typeOrdinal == -1) ? null : GoalType.values()[typeOrdinal]; // 序数から enum を復元 (null の場合は null)
+        //int typeOrdinal = in.readInt();
+        //Log.d("GoalType Debugging",valueOf(typeOrdinal));
+        //type = (typeOrdinal == -1) ? null : GoalType.values()[typeOrdinal]; // 序数から enum を復元 (null の場合は null)
+        String typeName = in.readString();
+        type = (typeName == null) ? null : GoalType.valueOf(typeName);
     }
 
     @Override
@@ -179,9 +239,14 @@ public class Goal implements Parcelable {
 
     public static final Creator<Goal> CREATOR = new Creator<Goal>() {
         @Override
-        public Goal createFromParcel(Parcel in) { return new Goal(in); }
+        public Goal createFromParcel(Parcel in) {
+            return new Goal(in);
+        }
+
         @Override
-        public Goal[] newArray(int size) { return new Goal[size]; }
+        public Goal[] newArray(int size) {
+            return new Goal[size];
+        }
     };
 
 }
