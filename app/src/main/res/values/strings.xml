@@ -140,7 +140,9 @@
     <string name="Confirm_EditButton">編集する</string>
     <!--Confirm_goal_list-->
     <string name="ConfirmGoalList_Title">確認する目標を選んでください</string>
-    <string name="ConfirmGoalList_DeleteButton">目標を削除する</string>>
+    <string name="ConfirmGoalList_DeleteButton">目標を削除する</string>
+    <!-- Confirm_goal_List_RecyclerView -->
+    <string name="ConfirmGoalList_RecyclerView_name">目標名：</string>
     <!---Confirm_goal_Layout-->
     <string name="ConfirmGoalLayout_finishButton">確認終了</string>
     <string name="ConfirmGoalLayout_confirmTaskButton">タスク確認</string>

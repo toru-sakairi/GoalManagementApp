@@ -137,21 +137,25 @@ public class RecyclerViewGoalListAdapter extends RecyclerView.Adapter<RecyclerVi
                 switch (clickedGoal.getType()) {
                     case SMART: {
                         viewModel.deleteSMARTByID(clickedGoal.getID());
+                        break;
                     }
                     case WILL_CAN_MUST: {
                         viewModel.deleteWCMByID(clickedGoal.getID());
+                        break;
                     }
                     case BENCHMARKING: {
                         viewModel.deleteBenchmarkingByID(clickedGoal.getID());
+                        break;
                     }
                     case MEMO_GOAL: {
                         viewModel.deleteMemoGoalByID(clickedGoal.getID());
+                        break;
                     }
                 }
+                //goalListから削除を行う
+                goalList.remove(position);
+                notifyItemRemoved(position);
             }
-            //goalListから削除を行う
-            goalList.remove(position);
-            notifyItemRemoved(position);
         }
     }
 }
