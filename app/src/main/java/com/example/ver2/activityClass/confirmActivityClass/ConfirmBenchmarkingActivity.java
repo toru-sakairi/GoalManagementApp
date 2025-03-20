@@ -38,33 +38,41 @@ public class ConfirmBenchmarkingActivity extends AppCompatActivity {
         benchMarkTextView = findViewById(R.id.confirm_benchmarking_BenchmarkTextView);
         compareTextView = findViewById(R.id.confirm_benchmarking_ComparisonTextView);
 
-        Intent intent = getIntent();
+        //Fragmentとのやり取りを行えるViewModel
+        confirmBenchmarkingViewModel = new ViewModelProvider(ConfirmBenchmarkingActivity.this).get(ConfirmBenchmarkingViewModel.class);
 
+        Intent intent = getIntent();
         //渡されたオブジェクトの確認とテキスト表示
         if (intent != null && intent.hasExtra("benchmarking")) {
             benchmarking = intent.getParcelableExtra("benchmarking"); // "benchmarking" という Key で benchmarkingオブジェクトを取得（データベースから（おそらく前のActivityで取得））
+            if (benchmarking != null) {
+                confirmBenchmarkingViewModel.updateBenchmarking(benchmarking);
+            }
+        }
+
+        confirmBenchmarkingViewModel.getBenchmarkingLiveData().observe(this, benchmarking -> {
             if (benchmarking != null) {
                 goalTextView.setText(benchmarking.getInitialGoal());
                 targetTextView.setText(benchmarking.getTarget());
                 benchMarkTextView.setText(benchmarking.getBenchMark());
                 compareTextView.setText(benchmarking.getComparison());
+                //benchmarkingオブジェクトを更新
+                this.benchmarking = benchmarking;
             }
-        }
+        });
 
         //編集ボタン
         Button editButton = findViewById(R.id.confirm_benchmarking_Edit_button);
         editButton.setOnClickListener(view -> {
-            //Fragmentとのやり取りを行えるViewModel
-            confirmBenchmarkingViewModel = new ViewModelProvider(ConfirmBenchmarkingActivity.this).get(ConfirmBenchmarkingViewModel.class);
-            confirmBenchmarkingViewModel.setActivity(ConfirmBenchmarkingActivity.this);
+            Benchmarking currentBenchmarking = confirmBenchmarkingViewModel.getBenchmarkingLiveData().getValue();
+            if (currentBenchmarking != null) {
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("benchmarking", currentBenchmarking);
 
-            Bundle bundle = new Bundle();
-            bundle.putParcelable("benchmarking", benchmarking);
-
-            //Fragmentを開始
-            ConfirmBenchmarkingEditFragment fragment = new ConfirmBenchmarkingEditFragment();
-            fragment.setArguments(bundle);
-            fragment.show(getSupportFragmentManager(), "ConfirmBenchmarkingEditFragment");
+                ConfirmBenchmarkingEditFragment fragment = new ConfirmBenchmarkingEditFragment();
+                fragment.setArguments(bundle);
+                fragment.show(getSupportFragmentManager(), "ConfirmBenchmarkingEditFragment");
+            }
         });
 
         //次のActivityに遷移するボタン
@@ -81,16 +89,5 @@ public class ConfirmBenchmarkingActivity extends AppCompatActivity {
             Intent intent_before = new Intent(ConfirmBenchmarkingActivity.this, ConfirmGoalListActivity.class);
             startActivity(intent_before);
         });
-    }
-
-    //EditFragmentで変更されたときに再ロードする(変更したオブジェクトの中身を反映するからここではデータベースをいじらない)
-    public void updateTextView(Benchmarking edit_benchmarking) {
-        this.benchmarking = edit_benchmarking;
-        if (benchmarking != null) {
-            goalTextView.setText(benchmarking.getInitialGoal());
-            targetTextView.setText(benchmarking.getTarget());
-            benchMarkTextView.setText(benchmarking.getBenchMark());
-            compareTextView.setText(benchmarking.getComparison());
-        }
     }
 }

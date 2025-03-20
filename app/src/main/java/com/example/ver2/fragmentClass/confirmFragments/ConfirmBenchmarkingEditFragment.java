@@ -1,7 +1,10 @@
+/*
+    ベンチマーキングフレームワークを使用した目標の編集をするFragment
+ */
+
 package com.example.ver2.fragmentClass.confirmFragments;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,14 +25,14 @@ public class ConfirmBenchmarkingEditFragment extends DialogFragment {
     private EditText compareEditText;
     private Benchmarking benchmarking;
 
+    //LiveDataを使用したViewModel。これのBenchmarkingオブジェクトをアップデートすることで、Activity側のUIもアップデートされる
     ConfirmBenchmarkingViewModel confirmBenchmarkingViewModel;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-        //目標作成時に用いたLayoutを流用
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.benchmarking_scroll_layout, container, false);
 
-        //ConfirmBenchmarkingのメソッド呼び出しに使用
+        // ViewModel の取得
         confirmBenchmarkingViewModel = new ViewModelProvider(requireActivity()).get(ConfirmBenchmarkingViewModel.class);
 
         goalEditText = view.findViewById(R.id.benchmarking_2_editText);
@@ -37,51 +40,37 @@ public class ConfirmBenchmarkingEditFragment extends DialogFragment {
         benchMarkEditText = view.findViewById(R.id.benchmarking_4_editText);
         compareEditText = view.findViewById(R.id.benchmarking_5_editText);
 
-        //Activityから送られてくる情報をセット
+        // Activity から送られてくる情報をセット
         Bundle bundle = getArguments();
         if (bundle != null) {
-            benchmarking = bundle.getParcelable("benchmarking"); // "benchmarking" という Key で WillCanMust オブジェクトを取得
+            benchmarking = bundle.getParcelable("benchmarking");
             if (benchmarking != null) {
-                // Benchmarking オブジェクトが存在する場合、EditText に値を設定
                 goalEditText.setText(benchmarking.getInitialGoal());
                 targetEditText.setText(benchmarking.getTarget());
                 benchMarkEditText.setText(benchmarking.getBenchMark());
                 compareEditText.setText(benchmarking.getComparison());
             }
         }
-        //debugよう
-        Log.d(" FragmentDebug is Existing Type ",benchmarking.getType().toString());
 
-        //セーブ＆Activityでのロード
+        // セーブボタンの処理
         Button saveButton = view.findViewById(R.id.benchmarking_saveButton);
-        saveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //ここではこの四つしか変更できないから四つだけセットする
-                benchmarking.setInitialGoal(goalEditText.getText().toString());
-                benchmarking.setTarget(targetEditText.getText().toString());
-                benchmarking.setBenchMark(benchMarkEditText.getText().toString());
-                benchmarking.setComparison(compareEditText.getText().toString());
+        saveButton.setOnClickListener(view1 -> {
+            // 入力内容を取得して更新
+            benchmarking.setInitialGoal(goalEditText.getText().toString());
+            benchmarking.setTarget(targetEditText.getText().toString());
+            benchmarking.setBenchMark(benchMarkEditText.getText().toString());
+            benchmarking.setComparison(compareEditText.getText().toString());
 
-                Log.d(" FragmentDebug is Existing Type ",benchmarking.getType().toString());
+            // ViewModel に変更後のデータを保存
+            confirmBenchmarkingViewModel.updateBenchmarking(benchmarking);
 
-                //変更したオブジェクトをActivity側で再ロードする（変更したオブジェクトもここでロードされる）
-                confirmBenchmarkingViewModel.callActivityMethod_updateTextView(benchmarking);
-
-                //Fragmentの終了
-                dismiss();
-            }
+            // Fragment を閉じる
+            dismiss();
         });
 
+        // 戻るボタンの処理
         Button backButton = view.findViewById(R.id.benchmarking_backButton);
-        //戻るボタンは何もしないで終了させる
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dismiss();
-            }
-        });
-
+        backButton.setOnClickListener(view1 -> dismiss());
 
         return view;
     }
