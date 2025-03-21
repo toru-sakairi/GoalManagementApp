@@ -1,6 +1,8 @@
+/*
+    自由記述形式を使用した目標の編集をするFragment
+ */
 package com.example.ver2.fragmentClass.confirmFragments;
 
-import android.app.Dialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,48 +19,47 @@ import com.example.ver2.fragmentClass.viewModels.ConfirmMemoGoalViewModel;
 
 public class ConfirmMemoGoalEditFragment extends DialogFragment {
     private EditText memoEditText;
-    
+
     Memo_Goal memo;
-    
+
+    //LiveDataを使用したViewModel。これのMemo_Goalオブジェクトをアップデートすることで、Activity側のUIもアップデートされる
     ConfirmMemoGoalViewModel confirmMemoGoalViewModel;
-    
+
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-        //作成時に用いたLayoutを流用
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        //目標作成時に用いたLayoutを流用
         View view = inflater.inflate(R.layout.memo_goal_1, container, false);
-        
+
+        //ViewModelの取得
         confirmMemoGoalViewModel = new ViewModelProvider(requireActivity()).get(ConfirmMemoGoalViewModel.class);
-        
+
         memoEditText = view.findViewById(R.id.memo_goal_1_editText);
-        
+
+        //Activityから送られてくる情報をセット
         Bundle bundle = getArguments();
-        if(bundle != null){
+        if (bundle != null) {
             memo = bundle.getParcelable("memo_goal");
-            if(memo != null){
+            if (memo != null) {
                 memoEditText.setText(memo.getMemo());
             }
         }
-        
+
+        //セーブボタンの処理
         Button saveButton = view.findViewById(R.id.memo_goal_1_saveButton);
-        saveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                memo.setMemo(memoEditText.getText().toString());
+        saveButton.setOnClickListener(view1 -> {
+            //入力内容を取得して更新
+            memo.setMemo(memoEditText.getText().toString());
 
-                //変更したオブジェクトをActivity側で再ロード（変更したのをActivityのMemoGoalオブジェクトに入れるのも兼ねている）
-                confirmMemoGoalViewModel.callActivityMethod_updateTextView(memo);
-                
-                dismiss();
-            }
+            //ViewModelに変更後のデータを保存
+            confirmMemoGoalViewModel.updateMemoGoal(memo);
+
+            //Fragmentを閉じる
+            dismiss();
         });
 
+        //戻るボタンの処理
         Button backButton = view.findViewById(R.id.memo_goal_1_backButton);
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dismiss();
-            }
-        });
+        backButton.setOnClickListener(view1 -> dismiss());
 
         return view;
     }

@@ -25,7 +25,7 @@ public class ConfirmBenchmarkingActivity extends AppCompatActivity {
     private TextView compareTextView;
     private Benchmarking benchmarking;
 
-    //EditFragmentからメソッドを呼び出されるために使用
+    //EditFragmentとの情報を共有やUIの更新に使用
     private ConfirmBenchmarkingViewModel confirmBenchmarkingViewModel;
 
     @Override
@@ -46,10 +46,12 @@ public class ConfirmBenchmarkingActivity extends AppCompatActivity {
         if (intent != null && intent.hasExtra("benchmarking")) {
             benchmarking = intent.getParcelableExtra("benchmarking"); // "benchmarking" という Key で benchmarkingオブジェクトを取得（データベースから（おそらく前のActivityで取得））
             if (benchmarking != null) {
+                //ViewModelのMutableLiveDataをアップデート
                 confirmBenchmarkingViewModel.updateBenchmarking(benchmarking);
             }
         }
 
+        //UIがViewModelが保持するLiveDataが変更された際に通知され更新される
         confirmBenchmarkingViewModel.getBenchmarkingLiveData().observe(this, benchmarking -> {
             if (benchmarking != null) {
                 goalTextView.setText(benchmarking.getInitialGoal());

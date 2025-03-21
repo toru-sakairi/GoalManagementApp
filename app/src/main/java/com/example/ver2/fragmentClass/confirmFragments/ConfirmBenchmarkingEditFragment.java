@@ -30,6 +30,7 @@ public class ConfirmBenchmarkingEditFragment extends DialogFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        //目標作成時に用いたLayoutを流用
         View view = inflater.inflate(R.layout.benchmarking_scroll_layout, container, false);
 
         // ViewModel の取得
