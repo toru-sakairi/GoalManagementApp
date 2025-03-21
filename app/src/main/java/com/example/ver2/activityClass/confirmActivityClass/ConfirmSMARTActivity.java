@@ -1,8 +1,12 @@
+/*
+    SMARTフレームワークを使用した目標の確認をするクラス
+    編集ボタンを押すことで、編集可能になる（FragmentDialogで表示）
+ */
+
 package com.example.ver2.activityClass.confirmActivityClass;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -21,13 +25,13 @@ public class ConfirmSMARTActivity extends AppCompatActivity {
     private TextView relevantTextView;
     private TextView timeBoundTextView;
     private TextView goalTextView;
-
     private SMART smart;
 
+    //EditFragmentとの情報を共有やUIの更新に使用
     ConfirmSMARTViewModel confirmSMARTViewModel;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState){
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.confirm_smart_scroll_layout);
 
@@ -38,64 +42,56 @@ public class ConfirmSMARTActivity extends AppCompatActivity {
         timeBoundTextView = findViewById(R.id.confirm_smart_textView_timeBound);
         goalTextView = findViewById(R.id.confirm_smart_textView_goal);
 
+        confirmSMARTViewModel = new ViewModelProvider(ConfirmSMARTActivity.this).get(ConfirmSMARTViewModel.class);
+
+
         Intent intent = getIntent();
-        if(intent != null && intent.hasExtra("smart")){
+        if (intent != null && intent.hasExtra("smart")) {
             smart = intent.getParcelableExtra("smart");
-            if(smart != null){
-                specificTextView.setText(smart.getSpecific());
-                measurableTextView.setText(smart.getMeasurable());
-                achiveableTextView.setText(smart.getAchievable());
-                relevantTextView.setText(smart.getRelevant());
-                timeBoundTextView.setText(smart.getTimeBound());
-                goalTextView.setText(smart.getSmartGoal());
+            if (smart != null) {
+                //ViewModelのMutableLiveDataをアップデート
+                confirmSMARTViewModel.updateSmart(smart);
             }
         }
 
+        //UIがViewModelが保持するLiveDataが変更された際に通知され更新される
+        confirmSMARTViewModel.getSmartLiveData().observe(this, smartLiveData -> {
+            if (smartLiveData != null) {
+                specificTextView.setText(smartLiveData.getSpecific());
+                measurableTextView.setText(smartLiveData.getMeasurable());
+                achiveableTextView.setText(smartLiveData.getAchievable());
+                relevantTextView.setText(smartLiveData.getRelevant());
+                timeBoundTextView.setText(smartLiveData.getTimeBound());
+                goalTextView.setText(smartLiveData.getSmartGoal());
+                //smartオブジェクトを更新
+                this.smart = smartLiveData;
+            }
+        });
+
+        //編集ボタン
         Button editButton = findViewById(R.id.confirm_smart_Edit_button);
-        editButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                confirmSMARTViewModel = new ViewModelProvider(ConfirmSMARTActivity.this).get(ConfirmSMARTViewModel.class);
-                confirmSMARTViewModel.setActivity(ConfirmSMARTActivity.this);
+        editButton.setOnClickListener(view -> {
+            Bundle bundle = new Bundle();
+            bundle.putParcelable("smart", smart);
 
-                Bundle bundle = new Bundle();
-                bundle.putParcelable("smart", smart);
-
-                ConfirmSMARTEditFragment fragment = new ConfirmSMARTEditFragment();
-                fragment.setArguments(bundle);
-                fragment.show(getSupportFragmentManager(), "ConfirmSMARTEditFragment");
-            }
+            ConfirmSMARTEditFragment fragment = new ConfirmSMARTEditFragment();
+            fragment.setArguments(bundle);
+            fragment.show(getSupportFragmentManager(), "ConfirmSMARTEditFragment");
         });
 
+        //次のActivityに遷移するボタン
         Button nextButton = findViewById(R.id.confirm_smart_nextButton);
-        nextButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(ConfirmSMARTActivity.this, ConfirmGoalActivity.class);
-                intent.putExtra("smart",smart);
-                startActivity(intent);
-            }
+        nextButton.setOnClickListener(view -> {
+            Intent intent_next = new Intent(ConfirmSMARTActivity.this, ConfirmGoalActivity.class);
+            intent_next.putExtra("smart", smart);
+            startActivity(intent_next);
         });
 
+        //前のActivityに戻るボタン
         Button backButton = findViewById(R.id.confirm_smart_backButton);
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(ConfirmSMARTActivity.this, ConfirmGoalListActivity.class);
-                startActivity(intent);
-            }
+        backButton.setOnClickListener(view -> {
+            Intent intent_before = new Intent(ConfirmSMARTActivity.this, ConfirmGoalListActivity.class);
+            startActivity(intent_before);
         });
-    }
-
-    public void updateTextView(SMART smart){
-        this.smart = smart;
-        if(smart != null){
-            specificTextView.setText(smart.getSpecific());
-            measurableTextView.setText(smart.getMeasurable());
-            achiveableTextView.setText(smart.getAchievable());
-            relevantTextView.setText(smart.getRelevant());
-            timeBoundTextView.setText(smart.getTimeBound());
-            goalTextView.setText(smart.getSmartGoal());
-        }
     }
 }

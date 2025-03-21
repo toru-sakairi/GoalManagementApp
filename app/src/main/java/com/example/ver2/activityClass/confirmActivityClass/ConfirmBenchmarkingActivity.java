@@ -38,7 +38,6 @@ public class ConfirmBenchmarkingActivity extends AppCompatActivity {
         benchMarkTextView = findViewById(R.id.confirm_benchmarking_BenchmarkTextView);
         compareTextView = findViewById(R.id.confirm_benchmarking_ComparisonTextView);
 
-        //Fragmentとのやり取りを行えるViewModel
         confirmBenchmarkingViewModel = new ViewModelProvider(ConfirmBenchmarkingActivity.this).get(ConfirmBenchmarkingViewModel.class);
 
         Intent intent = getIntent();
