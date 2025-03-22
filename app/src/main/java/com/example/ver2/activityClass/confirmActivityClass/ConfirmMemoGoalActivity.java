@@ -26,7 +26,7 @@ public class ConfirmMemoGoalActivity extends AppCompatActivity {
     ConfirmMemoGoalViewModel confirmMemoGoalViewModel;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState){
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.confirm_memo_goal_layout);
 
@@ -36,15 +36,15 @@ public class ConfirmMemoGoalActivity extends AppCompatActivity {
 
         //渡されたオブジェクトの確認とテキスト表示
         Intent intent = getIntent();
-        if(intent != null && intent.hasExtra("memo_goal")){
+        if (intent != null && intent.hasExtra("memo_goal")) {
             memo = intent.getParcelableExtra("memo_goal");
-            if(memo != null){
+            if (memo != null) {
                 confirmMemoGoalViewModel.updateMemoGoal(memo);
             }
         }
 
         confirmMemoGoalViewModel.getMemoGoalLiveData().observe(this, memoGoal -> {
-            if(memoGoal != null){
+            if (memoGoal != null) {
                 memoGoalTextView.setText(memoGoal.getMemo());
                 //memoオブジェクトを更新
                 this.memo = memoGoal;
@@ -54,27 +54,31 @@ public class ConfirmMemoGoalActivity extends AppCompatActivity {
         //編集ボタン
         Button editButton = findViewById(R.id.confirm_memo_goal_Edit_button);
         editButton.setOnClickListener(view -> {
+            //ViewModelから値を引っ張ってくる
+            Memo_Goal currentMemo = confirmMemoGoalViewModel.getMemoGoalLiveData().getValue();
+            if (currentMemo != null) {
                 Bundle bundle = new Bundle();
-                bundle.putParcelable("memo_goal",memo);
+                bundle.putParcelable("memo_goal", currentMemo);
 
                 ConfirmMemoGoalEditFragment fragment = new ConfirmMemoGoalEditFragment();
                 fragment.setArguments(bundle);
                 fragment.show(getSupportFragmentManager(), "ConfirmMemoGoalEditFragment");
+            }
         });
 
         //次のActivityに遷移するボタン
         Button nextButton = findViewById(R.id.confirm_memo_goal_nextButton);
         nextButton.setOnClickListener(view -> {
-                Intent intent_next = new Intent(ConfirmMemoGoalActivity.this, ConfirmGoalActivity.class);
-                intent_next.putExtra("memo_goal",memo);
-                startActivity(intent_next);
+            Intent intent_next = new Intent(ConfirmMemoGoalActivity.this, ConfirmGoalActivity.class);
+            intent_next.putExtra("memo_goal", memo);
+            startActivity(intent_next);
         });
 
         //前のActivityに戻るボタン
         Button backButton = findViewById(R.id.confirm_memo_goal_backButton);
         backButton.setOnClickListener(view -> {
-                Intent intent_before = new Intent(ConfirmMemoGoalActivity.this, ConfirmGoalListActivity.class);
-                startActivity(intent_before);
+            Intent intent_before = new Intent(ConfirmMemoGoalActivity.this, ConfirmGoalListActivity.class);
+            startActivity(intent_before);
         });
     }
 }

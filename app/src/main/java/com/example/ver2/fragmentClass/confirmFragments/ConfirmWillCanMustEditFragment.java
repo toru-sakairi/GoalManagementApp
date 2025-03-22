@@ -1,7 +1,9 @@
+/*
+    WillCanMustフレームワークを使用した目標の編集をするFragment
+ */
 package com.example.ver2.fragmentClass.confirmFragments;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,15 +22,17 @@ public class ConfirmWillCanMustEditFragment extends DialogFragment {
     private EditText canEditText;
     private EditText mustEditText;
     private EditText goalEditText;
-
     private WillCanMust wcm;
 
+    //LiveDataを使用したViewModel。これのWillCanMustオブジェクトをアップデートすることで、Activity側のUIもアップデートされる。
     ConfirmWillCanMustViewModel viewModel;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-        View view = inflater.inflate(R.layout.willcanmust_scroll_layout,container,false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        //目標作成時に用いたLayoutを流用
+        View view = inflater.inflate(R.layout.willcanmust_scroll_layout, container, false);
 
+        //ViewModelの取得
         viewModel = new ViewModelProvider(requireActivity()).get(ConfirmWillCanMustViewModel.class);
 
         willEditText = view.findViewById(R.id.WillCanMust_editText_Will);
@@ -36,10 +40,11 @@ public class ConfirmWillCanMustEditFragment extends DialogFragment {
         mustEditText = view.findViewById(R.id.WillCanMust_editText_Must);
         goalEditText = view.findViewById(R.id.WillCanMust_editText_Goal);
 
+        //Activityから送られてくる情報をセット
         Bundle bundle = getArguments();
-        if(bundle != null){
+        if (bundle != null) {
             wcm = bundle.getParcelable("wcm");
-            if(wcm != null){
+            if (wcm != null) {
                 willEditText.setText(wcm.getWill());
                 canEditText.setText(wcm.getCan());
                 mustEditText.setText(wcm.getMust());
@@ -47,33 +52,26 @@ public class ConfirmWillCanMustEditFragment extends DialogFragment {
             }
         }
 
+        //セーブボタンの処理
         Button saveButton = view.findViewById(R.id.willCanMust_saveButton);
-        saveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                wcm.setWill(willEditText.getText().toString());
-                wcm.setCan(canEditText.getText().toString());
-                wcm.setMust(mustEditText.getText().toString());
-                wcm.setWcmGoal(goalEditText.getText().toString());
+        saveButton.setOnClickListener(view1 -> {
+            //入力内容を取得して更新
+            wcm.setWill(willEditText.getText().toString());
+            wcm.setCan(canEditText.getText().toString());
+            wcm.setMust(mustEditText.getText().toString());
+            wcm.setWcmGoal(goalEditText.getText().toString());
 
-                //この時点でwcmのWCMGoalが設定されていない
-                Log.d("WCMGoal Debug",goalEditText.getText().toString());
+            //ViewModelに変更後のデータを保存
+            viewModel.updateWcm(wcm);
 
-                viewModel.callActivityMethod_updateTextView(wcm);
-
-                dismiss();
-            }
+            //Fragmentを閉じる
+            dismiss();
         });
 
+        //戻るボタンの処理
         Button backButton = view.findViewById(R.id.willCanMust_backButton);
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dismiss();
-            }
-        });
+        backButton.setOnClickListener(view1 -> dismiss());
 
         return view;
     }
-
 }

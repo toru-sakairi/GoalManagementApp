@@ -65,6 +65,7 @@ public class ConfirmBenchmarkingActivity extends AppCompatActivity {
         //編集ボタン
         Button editButton = findViewById(R.id.confirm_benchmarking_Edit_button);
         editButton.setOnClickListener(view -> {
+            //ViewModelから値を引っ張ってくる
             Benchmarking currentBenchmarking = confirmBenchmarkingViewModel.getBenchmarkingLiveData().getValue();
             if (currentBenchmarking != null) {
                 Bundle bundle = new Bundle();

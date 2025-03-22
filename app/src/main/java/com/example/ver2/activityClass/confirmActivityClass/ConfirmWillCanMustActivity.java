@@ -1,8 +1,12 @@
+/*
+    WillCanMustフレームワークを使用した目標の確認をするクラス
+    編集ボタンを押すことで、編集可能になる（FragmentDialogで表示）
+ */
+
 package com.example.ver2.activityClass.confirmActivityClass;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -19,76 +23,73 @@ public class ConfirmWillCanMustActivity extends AppCompatActivity {
     private TextView canTextView;
     private TextView mustTextView;
     private TextView goalTextView;
-
     private WillCanMust wcm;
 
+    //EditFragmentとの情報を共有やUIの更新に使用
     private ConfirmWillCanMustViewModel confirmWillCanMustViewModel;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState){
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.confirm_willcanmust_scroll_layout);
-
-        confirmWillCanMustViewModel = new ViewModelProvider(this).get(ConfirmWillCanMustViewModel.class);
-        confirmWillCanMustViewModel.setActivity(this);
 
         willTextView = findViewById(R.id.confirm_WillCanMust_textView_Will);
         canTextView = findViewById(R.id.confirm_WillCanMust_textView_Can);
         mustTextView = findViewById(R.id.confirm_WillCanMust_textView_Must);
         goalTextView = findViewById(R.id.confirm_WillCanMust_textView_Goal);
 
+        confirmWillCanMustViewModel = new ViewModelProvider(this).get(ConfirmWillCanMustViewModel.class);
+
         Intent intent = getIntent();
-        if(intent != null && intent.hasExtra("willCanMust")){
+        //渡されたオブジェクトの確認とテキスト表示
+        if (intent != null && intent.hasExtra("willCanMust")) {
             wcm = intent.getParcelableExtra("willCanMust");
-            if(wcm != null){
-                willTextView.setText(wcm.getWill());
-                canTextView.setText(wcm.getCan());
-                mustTextView.setText(wcm.getMust());
-                goalTextView.setText(wcm.getWcmGoal());
+            if (wcm != null) {
+                //ViewModelのMutableLiveDataをアップデート
+                confirmWillCanMustViewModel.updateWcm(wcm);
             }
         }
 
-        Button nextButton = findViewById(R.id.confirm_willCanMust_nextButton);
-        nextButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(ConfirmWillCanMustActivity.this, ConfirmGoalActivity.class);
-                intent.putExtra("wcm",wcm);
-                startActivity(intent);
+        //UIがViewModelが保持するLiveDataが変更された際に通知され更新される
+        confirmWillCanMustViewModel.getWcmLiveData().observe(this, wcmLiveData -> {
+            if (wcmLiveData != null) {
+                willTextView.setText(wcmLiveData.getWill());
+                canTextView.setText(wcmLiveData.getCan());
+                mustTextView.setText(wcmLiveData.getMust());
+                goalTextView.setText(wcmLiveData.getWcmGoal());
+                //wcmオブジェクトを更新
+                this.wcm = wcmLiveData;
             }
         });
 
-        Button backButton = findViewById(R.id.confirm_willCanMust_backButton);
-        backButton.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view){
-                Intent intent = new Intent(ConfirmWillCanMustActivity.this, ConfirmGoalListActivity.class);
-                startActivity(intent);
-            }
-        });
-
+        //編集ボタン
         Button editButton = findViewById(R.id.confirm_willCanMust_Edit_button);
-        editButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        editButton.setOnClickListener(view -> {
+            //ViewModelから値を引っ張ってくる
+            WillCanMust currentWcm = confirmWillCanMustViewModel.getWcmLiveData().getValue();
+            if (currentWcm != null) {
                 Bundle bundle = new Bundle();
-                bundle.putParcelable("wcm", wcm);
+                bundle.putParcelable("wcm", currentWcm);
 
                 ConfirmWillCanMustEditFragment fragment = new ConfirmWillCanMustEditFragment();
                 fragment.setArguments(bundle);
                 fragment.show(getSupportFragmentManager(), "ConfirmWillCanMustEditFragment");
             }
         });
-    }
 
-    public void updateTextView(WillCanMust wcm){
-        this.wcm = wcm;
+        //次のActivityに遷移するボタン
+        Button nextButton = findViewById(R.id.confirm_willCanMust_nextButton);
+        nextButton.setOnClickListener(view -> {
+            Intent intent_next = new Intent(ConfirmWillCanMustActivity.this, ConfirmGoalActivity.class);
+            intent_next.putExtra("wcm", wcm);
+            startActivity(intent_next);
+        });
 
-        if(wcm != null) {
-            willTextView.setText(wcm.getWill());
-            canTextView.setText(wcm.getCan());
-            mustTextView.setText(wcm.getMust());
-            goalTextView.setText(wcm.getWcmGoal());
-        }
+        //前のActivityに戻るボタン
+        Button backButton = findViewById(R.id.confirm_willCanMust_backButton);
+        backButton.setOnClickListener(view -> {
+            Intent intent_before = new Intent(ConfirmWillCanMustActivity.this, ConfirmGoalListActivity.class);
+            startActivity(intent_before);
+        });
     }
 }

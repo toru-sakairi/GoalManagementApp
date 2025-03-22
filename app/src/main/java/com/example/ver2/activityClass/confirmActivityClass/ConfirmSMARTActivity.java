@@ -71,12 +71,16 @@ public class ConfirmSMARTActivity extends AppCompatActivity {
         //編集ボタン
         Button editButton = findViewById(R.id.confirm_smart_Edit_button);
         editButton.setOnClickListener(view -> {
-            Bundle bundle = new Bundle();
-            bundle.putParcelable("smart", smart);
+            //ViewModelから値を引っ張ってくる
+            SMART currentSMART = confirmSMARTViewModel.getSmartLiveData().getValue();
+            if (currentSMART != null) {
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("smart", currentSMART);
 
-            ConfirmSMARTEditFragment fragment = new ConfirmSMARTEditFragment();
-            fragment.setArguments(bundle);
-            fragment.show(getSupportFragmentManager(), "ConfirmSMARTEditFragment");
+                ConfirmSMARTEditFragment fragment = new ConfirmSMARTEditFragment();
+                fragment.setArguments(bundle);
+                fragment.show(getSupportFragmentManager(), "ConfirmSMARTEditFragment");
+            }
         });
 
         //次のActivityに遷移するボタン
