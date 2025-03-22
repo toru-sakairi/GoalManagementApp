@@ -1,18 +1,16 @@
+/*
+    作成した目標のGoalクラスの内容を確認するのと編集を行うことのできるクラス
+    編集ボタンを押すことで、変種可能になる
+ */
 package com.example.ver2.activityClass.confirmActivityClass;
-
-import static android.content.ContentValues.TAG;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -32,10 +30,10 @@ import com.example.ver2.fragmentClass.confirmFragments.ConfirmTaskFragment;
 import com.example.ver2.fragmentClass.viewModels.ConfirmGoalViewModel;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class ConfirmGoalActivity extends AppCompatActivity {
+    //データ保存用のViewModel
     private GoalDataViewModel goalDataViewModel;
 
     private WillCanMust wcm;
@@ -51,10 +49,9 @@ public class ConfirmGoalActivity extends AppCompatActivity {
     private CalendarView startDateCalendar;
     private CalendarView finishDateCalendar;
 
-    private Date startDate;
-    private Date finishDate;
-
+    //EditFragmentとの情報を共有やUIの更新に使用
     private ConfirmGoalViewModel confirmGoalViewModel;
+
     RecyclerView taskRecyclerView;
     RecyclerViewTaskListAdapter adapter;
 
@@ -71,16 +68,11 @@ public class ConfirmGoalActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
 
-        //Debug用
-        Bundle extras = getIntent().getExtras();
-        if (extras != null) {
-            Log.d("Intent Debug", "Extras: " + extras.keySet());
-        }
-
-
-        //保存用のViewModel
+        //ViewModelを生成
         goalDataViewModel = new ViewModelProvider(ConfirmGoalActivity.this).get(GoalDataViewModel.class);
+        confirmGoalViewModel = new ViewModelProvider(ConfirmGoalActivity.this).get(ConfirmGoalViewModel.class);
 
+        //intentで前のActivityからそれぞれのフレームワークの情報を取得する。（１つだけnullじゃない）
         if (intent != null) {
             if (intent.hasExtra("wcm")) {
                 wcm = intent.getParcelableExtra("wcm");
@@ -99,14 +91,10 @@ public class ConfirmGoalActivity extends AppCompatActivity {
                 }
             } else if (intent.hasExtra("benchmarking")) {
                 benchmarking = intent.getParcelableExtra("benchmarking");
-                //if(benchmarking == null)
-                //Log.d("benchmarking is Existing", " benchmarking is not Existing");
                 if (benchmarking != null && benchmarking.isGoalExist()) {
-                    //Log.d("benchmarking is having goal", "benchmarking is having goal");
                     goal = new Goal(benchmarking.getName(), benchmarking.getDescription(), benchmarking.getCreateDate(), benchmarking.getStartDate(), benchmarking.getFinishDate(), benchmarking.isState(), benchmarking.getTasks(), benchmarking.getType());
                 } else {
                     goal = new Goal(null, null, null, null, null, false, null, GoalType.BENCHMARKING);
-                    //Log.d("benchmarking is not having goal", "benchmarking is not having goal");
                 }
             } else if (intent.hasExtra("memo_goal")) {
                 memo = intent.getParcelableExtra("memo_goal");
@@ -116,225 +104,105 @@ public class ConfirmGoalActivity extends AppCompatActivity {
                     goal = new Goal(null, null, null, null, null, false, null, GoalType.MEMO_GOAL);
                 }
             }
-        } else {
-            Log.d(TAG, "break:Not intentObject");
+            //ViewModelのGoalオブジェクトをアップデート
+            confirmGoalViewModel.updateGoal(goal);
         }
 
-        setActivityComponent(goal);
+        //UIがViewModelが保持するLiveDataが変更された際に通知され更新される
+        confirmGoalViewModel.getGoalLiveData().observe(this, goalLiveData -> {
+            setActivityComponent(goalLiveData);
+            //goalオブジェクトを更新
+            goal = goalLiveData;
+        });
 
-        //いらないかも？それか編集ボタンにしたほうが分かりやすいかも
-//        Button confirmTaskButton = findViewById(R.id.confirmGoalLayout_confirmGoalButton);
-//        confirmTaskButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//
-//            }
-//        });
-
-        //オブジェクトを保持しながら的な
+        //オブジェクトを更新して前のActivityに遷移する
         Button backButton = findViewById(R.id.confirmGoalLayout_backButton);
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                //Goalそのままやったほうがいい気がする　原因がまだわからない 2/21
-                /*if (goal != null) {
-                    String goalName = goalNameTextView.getText().toString();
-                    String goalDescription = goalDescriptionTextView.getText().toString();
-
-                    goal.setName(goalName);
-                    goal.setDescription(goalDescription);
-                    //作成日がしっかりそのままか確認する必要あるかも
-                    //goal.setCreateDate(new Date());
-                    //初期の値をデータと合わせる
-                    goal.setStartDate(startDate);
-                    goal.setFinishDate(finishDate);
-                    //達成した場合とかによってTrueにしたいけどとりあえずこのまま
-                    goal.setState(false);
-                    goal.setTasks(taskList);
-                }*/
-                //機能してるっぽい
-                //Log.d("Debug", "goalNameTextView: " + goalNameTextView.getText().toString());
-                //Log.d("Debug", "goalDescriptionTextView: " + goalDescriptionTextView.getText().toString());
-                //Log.d("goal confirm Null", goal.getName() + ":" + goal.getDescription());
-
-                //オブジェクトに保存 ここで前のActivityに遷移
-                if (wcm != null) {
-                    wcm.updateGoal(goal);
-                    Intent intent = new Intent(ConfirmGoalActivity.this, ConfirmWillCanMustActivity.class);
-                    intent.putExtra("willCanMust", wcm);
-                    startActivity(intent);
-                } else if (benchmarking != null) {
-                    benchmarking.updateGoal(goal);
-                    Intent intent = new Intent(ConfirmGoalActivity.this, ConfirmBenchmarkingActivity.class);
-                    intent.putExtra("benchmarking", benchmarking);
-                    Log.d("Intent has benchmarking ConfirmGoalActivity", benchmarking.getName() + ":" + benchmarking.getDescription());
-                    startActivity(intent);
-                } else if (smart != null) {
-                    smart.updateGoal(goal);
-                    Intent intent = new Intent(ConfirmGoalActivity.this, ConfirmSMARTActivity.class);
-                    intent.putExtra("smart", smart);
-                    startActivity(intent);
-                } else if (memo != null) {
-                    memo.updateGoal(goal);
-                    Intent intent = new Intent(ConfirmGoalActivity.this, ConfirmMemoGoalActivity.class);
-                    intent.putExtra("memo_goal", memo);
-                    startActivity(intent);
-                }
+        backButton.setOnClickListener(view  -> {
+            //オブジェクトに保存 ここで前のActivityに遷移
+            if (wcm != null) {
+                wcm.updateGoal(goal);
+                Intent intent_before = new Intent(ConfirmGoalActivity.this, ConfirmWillCanMustActivity.class);
+                intent_before.putExtra("willCanMust", wcm);
+                startActivity(intent_before);
+            } else if (benchmarking != null) {
+                benchmarking.updateGoal(goal);
+                Intent intent_before = new Intent(ConfirmGoalActivity.this, ConfirmBenchmarkingActivity.class);
+                intent_before.putExtra("benchmarking", benchmarking);
+                startActivity(intent_before);
+            } else if (smart != null) {
+                smart.updateGoal(goal);
+                Intent intent_before = new Intent(ConfirmGoalActivity.this, ConfirmSMARTActivity.class);
+                intent_before.putExtra("smart", smart);
+                startActivity(intent_before);
+            } else if (memo != null) {
+                memo.updateGoal(goal);
+                Intent intent_before = new Intent(ConfirmGoalActivity.this, ConfirmMemoGoalActivity.class);
+                intent_before.putExtra("memo_goal", memo);
+                startActivity(intent_before);
             }
         });
 
+        //次のActivity（ConfirmGoalListActivityに戻る）ボタン
         Button confirmGoalButton = findViewById(R.id.confirmGoalLayout_confirmGoalButton);
-        confirmGoalButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                //編集しなかった場合でも保存する感じにしとく
-                String goalName = goalNameTextView.getText().toString();
-                String goalDescription = goalDescriptionTextView.getText().toString();
-
-                goal.setName(goalName);
-                goal.setDescription(goalDescription);
-                //作成日がしっかりそのままか確認する必要あるかも
-                //goal.setCreateDate(new Date());
-                //このstartDateとfinishDateが設定されてないとnullになるからこれを最初に入ったときとか、アップデートする際にnullにしない
-                goal.setStartDate(startDate);
-                goal.setFinishDate(finishDate);
-                //達成した場合とかによってTrueにしたいけどとりあえずこのまま
-                goal.setState(false);
-                goal.setTasks(taskList);
-
-                //日付のnullデバッグ
-                if (goal.getStartDate() != null)
-                    Log.d("ConfirmGoalStartDate", startDate.toString());
-                else
-                    Log.d("ConfirmGoalStartDate", "NULL");
-                if (goal.getFinishDate() != null)
-                    Log.d("ConfirmGoalFinishDate", finishDate.toString());
-                else
-                    Log.d("ConfirmGoalFinishDate", "NULL");
-
-
-                //データベースに保存
-                if (wcm != null) {
-                    wcm.updateGoal(goal);
-                    goalDataViewModel.updateWCM(wcm);
-                } else if (benchmarking != null) {
-                    benchmarking.updateGoal(goal);
-                    goalDataViewModel.updateBenchmarking(benchmarking);
-                } else if (smart != null) {
-                    smart.updateGoal(goal);
-                    goalDataViewModel.updateSMART(smart);
-                } else if (memo != null) {
-                    memo.updateGoal(goal);
-                    goalDataViewModel.updateMemo_Goal(memo);
-                }
-
-                Intent intent = new Intent(ConfirmGoalActivity.this, ConfirmGoalListActivity.class);
-                startActivity(intent);
+        confirmGoalButton.setOnClickListener(view -> {
+            //ViewModelのMutableLiveDataが変更された際に通知され(observe)goalインスタンスは最新の状態であると考えられる
+            //編集していない場合でもデータベースに保存するメソッドをしておく
+            //データベースに保存
+            if (wcm != null) {
+                wcm.updateGoal(goal);
+                goalDataViewModel.updateWCM(wcm);
+            } else if (benchmarking != null) {
+                benchmarking.updateGoal(goal);
+                goalDataViewModel.updateBenchmarking(benchmarking);
+            } else if (smart != null) {
+                smart.updateGoal(goal);
+                goalDataViewModel.updateSMART(smart);
+            } else if (memo != null) {
+                memo.updateGoal(goal);
+                goalDataViewModel.updateMemo_Goal(memo);
             }
+
+            Intent intent_next = new Intent(ConfirmGoalActivity.this, ConfirmGoalListActivity.class);
+            startActivity(intent_next);
         });
 
+        //編集ボタン
         Button editButton = findViewById(R.id.confirm_goal_Edit_button);
-        editButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                confirmGoalViewModel = new ViewModelProvider(ConfirmGoalActivity.this).get(ConfirmGoalViewModel.class);
-                confirmGoalViewModel.setActivity(ConfirmGoalActivity.this);
-
-                Bundle bundle = new Bundle();
-                bundle.putParcelable("goal", goal);
-
+        editButton.setOnClickListener(view -> {
                 ConfirmGoalEditFragment fragment = new ConfirmGoalEditFragment();
-                fragment.setArguments(bundle);
                 fragment.show(getSupportFragmentManager(), "ConfirmGoalEditFragment");
-
-            }
         });
-
-
     }
 
-
+    //UIの初期化、または変更が通知された際にアップデートするメソッド
     private void setActivityComponent(Goal goal) {
         // Goal オブジェクトの値を UI に設定
         //中身がnullでも、初期値で設定されるらしい
-        startDate = goal.getStartDate();
-        finishDate = goal.getFinishDate();
+        goalNameTextView.setText(goal.getName());
+        goalDescriptionTextView.setText(goal.getDescription());
+        if (goal.getStartDate() != null) {
+            startDateCalendar.setDate(Converters.dateToTimestamp(goal.getStartDate()));
+        }
 
-
-        if (goal != null) {
-            Log.d("isGoal setActivityComponent", "goal is Existing");
-            //Log.d("isGoalName setActivityComponent",goal.getName());
-            //Log.d("isGoalDescription setActivityComponent",goal.getDescription());
-            goalNameTextView.setText(goal.getName());
-            goalDescriptionTextView.setText(goal.getDescription());
-
-            if (goal.getStartDate() != null) {
-                startDateCalendar.setDate(Converters.dateToTimestamp(startDate));
-            }
-
-            if (goal.getFinishDate() != null) {
-                finishDateCalendar.setDate(Converters.dateToTimestamp(finishDate));
-            }
-        } else {
-            Log.d("isGoal setActivityComponent", "goal is not Existing");
+        if (goal.getFinishDate() != null) {
+            finishDateCalendar.setDate(Converters.dateToTimestamp(goal.getFinishDate()));
         }
 
         // RecyclerView の設定
         taskRecyclerView = findViewById(R.id.confirmGoalLayout_taskList);
         taskList = new ArrayList<>(); // taskList を空の ArrayList で初期化
 
-        if (goal != null && goal.getTasks() != null) { // goal と goal.getTasks() が null でない場合
+        //taskListの更新
+        if (goal.getTasks() != null) { // goal.getTasks() が null でない場合
             taskList = goal.getTasks(); // Goal オブジェクトの TaskList を taskList に代入
         }
 
         adapter = new RecyclerViewTaskListAdapter(taskList);
         taskRecyclerView.setAdapter(adapter);
-        adapter.setOnItemClickListener(new RecyclerViewTaskListAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(int position) {
-                openConfirmTaskFragment(position);
-            }
-        });
-
-    }
-
-    public void updateLayoutComponent(Goal goal_changed) {
-        goal = goal_changed;
-
-        if (goal != null) {
-            //この二つを忘れない
-            startDate = goal.getStartDate();
-            finishDate = goal.getFinishDate();
-
-            goalNameTextView.setText(goal.getName());
-            goalDescriptionTextView.setText(goal.getDescription());
-            if (goal.getStartDate() != null) {
-                startDateCalendar.setDate(Converters.dateToTimestamp(startDate));
-
-            }
-            if (goal.getFinishDate() != null) {
-                finishDateCalendar.setDate(Converters.dateToTimestamp(finishDate));
-            }
-        } else {
-            Log.d("isGoal setActivityComponent", "goal is not Existing");
-        }
-        if (goal != null && goal.getTasks() != null) { // goal と goal.getTasks() が null でない場合
-            taskList = goal.getTasks(); // Goal オブジェクトの TaskList を taskList に代入
-            // アダプターにデータが変更されたことを通知
-            adapter = (RecyclerViewTaskListAdapter) taskRecyclerView.getAdapter();
-            if (adapter != null) {
-                adapter.notifyDataSetChanged();
-            }
-        }
-
+        adapter.setOnItemClickListener(this::openConfirmTaskFragment);
     }
 
     private void openConfirmTaskFragment(int id) {
-        ConfirmGoalViewModel viewModel = new ViewModelProvider(this).get(ConfirmGoalViewModel.class);
-        viewModel.setActivity(this);
-
         Task confirmTask = findTaskByID(id);
         //Fragmentに初期値を設定する
         Bundle bundle = new Bundle();
@@ -343,10 +211,6 @@ public class ConfirmGoalActivity extends AppCompatActivity {
         ConfirmTaskFragment confirmTaskFragment = new ConfirmTaskFragment();
         confirmTaskFragment.setArguments(bundle);
         confirmTaskFragment.show(getSupportFragmentManager(), "ConfirmTaskFragment");
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction transaction = fragmentManager.beginTransaction();
-        //transaction.add(R.id.addTaskFragmentView, addTaskFragment);
-        transaction.commit();
     }
 
     private Task findTaskByID(int id) {
@@ -357,14 +221,4 @@ public class ConfirmGoalActivity extends AppCompatActivity {
         }
         return null;
     }
-
-    public int getTaskNum() {
-        if (taskList != null) {
-            return taskList.size();
-        } else {
-            taskList = new ArrayList<Task>();
-            return taskList.size();
-        }
-    }
-
 }

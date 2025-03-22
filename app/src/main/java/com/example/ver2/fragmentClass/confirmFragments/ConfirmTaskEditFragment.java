@@ -101,14 +101,11 @@ public class ConfirmTaskEditFragment extends DialogFragment {
                 task.setCreateDate(new Date());
 
                 if (isNew) {
-                    task.setID(viewModel.callFragmentMethod_getTaskNum());
-                    viewModel.callFragmentMethod_addTask(task);
-                    viewModel.callFragmentMethod_updateTaskList();
+                    viewModel.addTask(task);
                     dismiss();
                 }else{
                     //IDはBundleで送られてきたTaskオブジェクトにそのままあってへんこうしてないから何もしない
-                    viewModel.callFragmentMethod_changeTask(task);
-                    viewModel.callFragmentMethod_updateTaskList();
+                    viewModel.changeTask(task);
                     dismiss();
                 }
             }
@@ -116,12 +113,7 @@ public class ConfirmTaskEditFragment extends DialogFragment {
 
         //何も反映しない
         Button backButton = view.findViewById(R.id.backButton_addTasklayout);
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dismiss();
-            }
-        });
+        backButton.setOnClickListener(view1 -> dismiss());
 
         return view;
     }

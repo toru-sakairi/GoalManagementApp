@@ -1,8 +1,10 @@
+/*
+    Goalの内容を編集するFragment
+ */
 package com.example.ver2.fragmentClass.confirmFragments;
 
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +18,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.ver2.R;
 import com.example.ver2.recyclerViewClass.RecyclerViewTaskListAdapter;
-import com.example.ver2.dataClass.GoalDataViewModel;
 import com.example.ver2.dataClass.Task;
 import com.example.ver2.dataClass.goalManagement.Goal;
 import com.example.ver2.fragmentClass.viewModels.ConfirmGoalViewModel;
@@ -39,14 +40,14 @@ public class ConfirmGoalEditFragment extends DialogFragment {
     private Date startDate;
     private Date finishDate;
 
-    private GoalDataViewModel goalDataViewModel;
-
+    //Activity側に変更されたことを通知するためのViewModel
     ConfirmGoalViewModel confirmGoalViewModel;
 
+    //TaskFragmentと情報を共有、更新するときに使用
     ConfirmTaskEditViewModel confirmTaskEditViewModel;
 
+    //TaskリストをUIでリスト化して表示するため
     RecyclerViewTaskListAdapter adapter;
-
     RecyclerView taskRecyclerView;
 
 
@@ -55,64 +56,57 @@ public class ConfirmGoalEditFragment extends DialogFragment {
         //save_goal_layoutを流用する
         View view = inflater.inflate(R.layout.save_goal_layout, container, false);
 
-        goalDataViewModel = new ViewModelProvider(requireActivity()).get(GoalDataViewModel.class);
-
         //ConfirmGoalActivityのメソッド呼び出しに使用
         confirmGoalViewModel = new ViewModelProvider(requireActivity()).get(ConfirmGoalViewModel.class);
+        //LiveDataを監視
+        confirmGoalViewModel.getGoalLiveData().observe(this, goalLiveData -> {
+            //アップデートする
+            goal = goalLiveData;
+            setFragmentComponent(view);
+        });
 
         //confirmTaskEditFragmentとのやり取りで使用
         confirmTaskEditViewModel = new ViewModelProvider(requireActivity()).get(ConfirmTaskEditViewModel.class);
-        confirmTaskEditViewModel.setFragment(ConfirmGoalEditFragment.this);
+        confirmTaskEditViewModel.updateTaskList(taskList);
+        //LiveDataを監視、TaskListに変更が加えられた際にgoalオブジェクトにもその値を変更し通知する
+        confirmTaskEditViewModel.getTaskListLiveData().observe(this, taskListLiveData -> {
+            if(goal != null){
+                goal.setTasks(taskListLiveData);
+                confirmGoalViewModel.updateGoal(goal);
+            }
+        });
 
         goalNameEditText = view.findViewById(R.id.goalNameEditText);
         goalDescriptionEditText = view.findViewById(R.id.goalDescriptionEditText);
         startDatePicker = view.findViewById(R.id.startDatePicker);
         finishDatePicker = view.findViewById(R.id.finishDatePicker);
 
-        //goalオブジェクトが送られてくるという想定で、保存するときはメソッド呼び出しであちら側で処理すればいいかもしれない
-        Bundle bundle = getArguments();
-        if(bundle != null){
-            goal = bundle.getParcelable("goal");
-            if(goal != null){
-                //メソッドでクラスの変数を使うのかそれとも引数のほうがいいのか、今回はいろんなところでgoal変数を使うから今回のメソッドは引数なしでいいかも？
-                setFragmentComponent(view);
-            }
-        }
-
+        //セーブボタンの処理
         Button saveButton = view.findViewById(R.id.saveGoalButton);
-        saveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        saveButton.setOnClickListener(view1 -> {
                 //goalがここでNullになる可能性あり
                 if(goal != null){
+                    //内容を取得して更新
                     goal.setName(goalNameEditText.getText().toString());
                     goal.setDescription(goalDescriptionEditText.getText().toString());
                     goal.setStartDate(startDate);
                     goal.setFinishDate(finishDate);
-
-                    //ここでエラーが発生：つまり、ここでGoalオブジェクトがNullになっている
-                    Log.d("goalName",goal.getName());
-                    Log.d("goalDescription",goal.getDescription());
-                    Log.d("goalStartDate",goal.getStartDate().toString());
-                    Log.d("goalFinishDate",goal.getFinishDate().toString());
-
                 }
-                confirmGoalViewModel.callActivityMethod_updateLayoutComponent(goal);
+                //ViewModelのMutableLiveDataを変更してActivityのUIやオブジェクトに変更されたことを通知
+                confirmGoalViewModel.updateGoal(goal);
+
+                //Fragmentを終了する
                 dismiss();
-            }
         });
 
+        //前の画面（元のActivity）に戻るボタン
         Button backButton = view.findViewById(R.id.backButton_saveGoallayout);
-        backButton.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view){
-                dismiss();
-            }
-        });
+        backButton.setOnClickListener(view_before -> dismiss());
 
         return view;
     }
 
+    //UIを設定
     private void setFragmentComponent(View view){
 
         goalNameEditText.setText(goal.getName());
@@ -135,22 +129,16 @@ public class ConfirmGoalEditFragment extends DialogFragment {
 
         taskRecyclerView = view.findViewById(R.id.SaveGoal_taskList);
         taskList = new ArrayList<>();
-        if(goal != null && goal.getTasks() != null){
-            taskList = goal.getTasks();
+        if(goal != null){
+            taskList = goal.getTasks() != null ? new ArrayList<>(goal.getTasks()) : new ArrayList<>();
         }
 
         adapter = new RecyclerViewTaskListAdapter(taskList);
         taskRecyclerView.setAdapter(adapter);
 
-        //Taskの変更を反映するコード？
         //RecyclerViewをタップしたときにTaskEditFragmentを表示するようにする
-        adapter.setOnItemClickListener(new RecyclerViewTaskListAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(int position) {
-                //タスクを編集する場合
-                openChangeTaskFragment(position);
-            }
-        });
+        //タスクを編集する場合
+        adapter.setOnItemClickListener(this::openChangeTaskFragment);
 
         // DatePicker のリスナー設定 (API レベル 26 以上)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -185,41 +173,6 @@ public class ConfirmGoalEditFragment extends DialogFragment {
         fragment.show(getActivity().getSupportFragmentManager(), "ConfirmTaskEditFragment");
     }
 
-    //Task変更後のUI（RecyclerView）Updateを行うメソッド
-    public void updateTaskList(){
-        if (goal != null && goal.getTasks() != null) { // goal と goal.getTasks() が null でない場合
-            taskList = goal.getTasks(); // Goal オブジェクトの TaskList を taskList に代入
-            // アダプターにデータが変更されたことを通知
-            adapter = (RecyclerViewTaskListAdapter) taskRecyclerView.getAdapter();
-            if (adapter != null) {
-                adapter.notifyDataSetChanged();
-            }
-        }
-    }
-
-
-
-    //これはSaveGoalActivityから持ってきたやつ
-    //とりあえず、Goalオブジェクトにアタッチする感じで、最後にそれぞれのフレームワークのやつに代入させる
-    public void addTask(Task task) {
-
-//        if(goal != null) {
-//            goal.addTask(task);
-//        }
-        if(taskList != null){
-            taskList.add(task);
-        }else{
-            taskList = new ArrayList<Task>();
-            taskList.add(task);
-        }
-
-        // アダプターにデータが変更されたことを通知
-        adapter = (RecyclerViewTaskListAdapter) taskRecyclerView.getAdapter();
-        if (adapter != null) {
-            adapter.notifyDataSetChanged();
-        }
-    }
-
     //タスクを探すメソッド
     private Task findTaskByID(int id) {
         for (Task task : taskList) {
@@ -229,23 +182,4 @@ public class ConfirmGoalEditFragment extends DialogFragment {
         }
         return null;
     }
-
-    public int getTaskNum() {
-        if (taskList != null) {
-            return taskList.size();
-        } else {
-            taskList = new ArrayList<Task>();
-            return taskList.size();
-        }
-    }
-
-    public void changeTask(Task task) {
-        for (int i = 0; i < taskList.size(); i++) {
-            if (taskList.get(i).getID() == task.getID()) {
-                taskList.set(i, task); // リスト内のオブジェクトを新しいTaskオブジェクトで置き換える
-                break; // IDが一致するオブジェクトは1つしかないため、ループを抜ける
-            }
-        }
-    }
-
 }
