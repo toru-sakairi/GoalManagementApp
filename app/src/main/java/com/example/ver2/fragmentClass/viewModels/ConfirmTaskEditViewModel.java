@@ -57,10 +57,12 @@ public class ConfirmTaskEditViewModel extends ViewModel {
     //すでにあるTaskを編集した際のメソッド
     public void changeTask(Task task) {
         List<Task> taskList = taskListLiveData.getValue();
-        for (int i = 0; i < taskList.size(); i++) {
-            if (taskList.get(i).getID() == task.getID()) {
-                taskList.set(i, task); // リスト内のオブジェクトを新しいTaskオブジェクトで置き換える
-                break; // IDが一致するオブジェクトは1つしかないため、ループを抜ける
+        if(taskList != null) {
+            for (int i = 0; i < taskList.size(); i++) {
+                if (taskList.get(i).getID() == task.getID()) {
+                    taskList.set(i, task); // リスト内のオブジェクトを新しいTaskオブジェクトで置き換える
+                    break; // IDが一致するオブジェクトは1つしかないため、ループを抜ける
+                }
             }
         }
         taskListLiveData.setValue(taskList);

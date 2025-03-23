@@ -49,9 +49,6 @@ public class ConfirmGoalActivity extends AppCompatActivity {
     private CalendarView startDateCalendar;
     private CalendarView finishDateCalendar;
 
-    //EditFragmentとの情報を共有やUIの更新に使用
-    private ConfirmGoalViewModel confirmGoalViewModel;
-
     RecyclerView taskRecyclerView;
     RecyclerViewTaskListAdapter adapter;
 
@@ -70,7 +67,8 @@ public class ConfirmGoalActivity extends AppCompatActivity {
 
         //ViewModelを生成
         goalDataViewModel = new ViewModelProvider(ConfirmGoalActivity.this).get(GoalDataViewModel.class);
-        confirmGoalViewModel = new ViewModelProvider(ConfirmGoalActivity.this).get(ConfirmGoalViewModel.class);
+        //EditFragmentとの情報を共有やUIの更新に使用 Localで宣言した（Warningがあったから）
+        ConfirmGoalViewModel confirmGoalViewModel = new ViewModelProvider(ConfirmGoalActivity.this).get(ConfirmGoalViewModel.class);
 
         //intentで前のActivityからそれぞれのフレームワークの情報を取得する。（１つだけnullじゃない）
         if (intent != null) {
@@ -110,9 +108,9 @@ public class ConfirmGoalActivity extends AppCompatActivity {
 
         //UIがViewModelが保持するLiveDataが変更された際に通知され更新される
         confirmGoalViewModel.getGoalLiveData().observe(this, goalLiveData -> {
-            setActivityComponent(goalLiveData);
             //goalオブジェクトを更新
             goal = goalLiveData;
+            setActivityComponent();
         });
 
         //オブジェクトを更新して前のActivityに遷移する
@@ -175,7 +173,7 @@ public class ConfirmGoalActivity extends AppCompatActivity {
     }
 
     //UIの初期化、または変更が通知された際にアップデートするメソッド
-    private void setActivityComponent(Goal goal) {
+    private void setActivityComponent() {
         // Goal オブジェクトの値を UI に設定
         //中身がnullでも、初期値で設定されるらしい
         goalNameTextView.setText(goal.getName());
@@ -202,6 +200,7 @@ public class ConfirmGoalActivity extends AppCompatActivity {
         adapter.setOnItemClickListener(this::openConfirmTaskFragment);
     }
 
+    //タスクを確認するためのFragment
     private void openConfirmTaskFragment(int id) {
         Task confirmTask = findTaskByID(id);
         //Fragmentに初期値を設定する

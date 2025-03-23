@@ -1,3 +1,6 @@
+/*
+    Taskを編集、新規追加する際に使用されるFragment
+ */
 package com.example.ver2.fragmentClass.confirmFragments;
 
 import android.os.Build;
@@ -15,17 +18,13 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.ver2.R;
 import com.example.ver2.dataClass.Task;
 import com.example.ver2.fragmentClass.viewModels.ConfirmTaskEditViewModel;
-import com.example.ver2.fragmentClass.viewModels.SaveGoalFragmentViewModel;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.zip.Inflater;
 
 public class ConfirmTaskEditFragment extends DialogFragment {
     private EditText taskNameEditText;
     private EditText taskDescriptionEditText;
-    private DatePicker startDatePicker;
-    private DatePicker finishDatePicker;
 
     private Task task;
 
@@ -35,6 +34,7 @@ public class ConfirmTaskEditFragment extends DialogFragment {
     //編集する場合か新規かで分けるための変数
     private boolean isNew;
 
+    //Task全体を監視するViewModel
     private ConfirmTaskEditViewModel viewModel;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -45,8 +45,8 @@ public class ConfirmTaskEditFragment extends DialogFragment {
 
         taskNameEditText = view.findViewById(R.id.taskName);
         taskDescriptionEditText = view.findViewById(R.id.taskDescription);
-        startDatePicker = view.findViewById(R.id.taskStartDate);
-        finishDatePicker = view.findViewById(R.id.taskFinishDate);
+        DatePicker startDatePicker = view.findViewById(R.id.taskStartDate);
+        DatePicker finishDatePicker = view.findViewById(R.id.taskFinishDate);
 
         Bundle bundle = getArguments();
 
@@ -90,24 +90,22 @@ public class ConfirmTaskEditFragment extends DialogFragment {
 
         //ここに編集中のConfirmGoalEditFragmentのタスクリスト（RecyclerView）の反映をする
         Button saveButton = view.findViewById(R.id.saveTaskButton);
-        saveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        saveButton.setOnClickListener(view1 -> {
 
-                task.setName(taskNameEditText.getText().toString());
-                task.setDescription(taskDescriptionEditText.getText().toString());
-                task.setStartDate(startDate);
-                task.setFinishDate(finishDate);
-                task.setCreateDate(new Date());
+            task.setName(taskNameEditText.getText().toString());
+            task.setDescription(taskDescriptionEditText.getText().toString());
+            task.setStartDate(startDate);
+            task.setFinishDate(finishDate);
+            task.setCreateDate(new Date());
 
-                if (isNew) {
-                    viewModel.addTask(task);
-                    dismiss();
-                }else{
-                    //IDはBundleで送られてきたTaskオブジェクトにそのままあってへんこうしてないから何もしない
-                    viewModel.changeTask(task);
-                    dismiss();
-                }
+            //ViewModelのメソッドで、新しいTaskを追加するものとタスクを編集するメソッド
+            if (isNew) {
+                viewModel.addTask(task);
+                dismiss();
+            }else{
+                //IDはBundleで送られてきたTaskオブジェクトにそのままあってへんこうしてないから何もしない
+                viewModel.changeTask(task);
+                dismiss();
             }
         });
 
