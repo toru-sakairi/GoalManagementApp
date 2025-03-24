@@ -60,9 +60,12 @@ public class RecyclerViewTaskListAdapter extends RecyclerView.Adapter<RecyclerVi
             }
         });
         // 削除ボタンのリスナー
-        holder.taskDeleteButton.setOnClickListener(view -> {
+        holder.taskDeleteButton.setOnClickListener(v -> {
             if (deleteListener != null) {
-                deleteListener.onTaskRemoved(position); // 削除リスナーを呼び出す
+                int currentPosition = holder.getAdapterPosition(); // 最新のpositionを取得
+                if (currentPosition != RecyclerView.NO_POSITION) {
+                    deleteListener.onTaskRemoved(currentPosition);
+                }
             }
         });
     }

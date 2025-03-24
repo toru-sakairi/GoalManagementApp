@@ -22,8 +22,6 @@ import java.util.Date;
 
 public class AddTaskFragment extends DialogFragment {
     private EditText taskNameEditText, taskDescriptionEditText;
-    private DatePicker taskStartDatePicker, taskFinishDatePicker;
-    private Button saveTaskButton;
     private Task task;
 
     private SaveGoalFragmentViewModel viewModel;
@@ -37,10 +35,10 @@ public class AddTaskFragment extends DialogFragment {
         View view = inflater.inflate(R.layout.add_task_layout, container, false);
         taskNameEditText = view.findViewById(R.id.taskName);
         taskDescriptionEditText = view.findViewById(R.id.taskDescription);
-        taskStartDatePicker = view.findViewById(R.id.taskStartDate);
-        taskFinishDatePicker = view.findViewById(R.id.taskFinishDate);
+        DatePicker taskStartDatePicker = view.findViewById(R.id.taskStartDate);
+        DatePicker taskFinishDatePicker = view.findViewById(R.id.taskFinishDate);
 
-        //SaveGoalActivityのメソッド呼び出しに使用
+        //
         viewModel = new ViewModelProvider(requireActivity()).get(SaveGoalFragmentViewModel.class);
 
         //タスクを上書きする場合にTrueにして使用
@@ -52,6 +50,7 @@ public class AddTaskFragment extends DialogFragment {
         if (bundle != null) {
             task = bundle.getParcelable("changeTask");
             if (task != null) {
+                Log.d("task name", task.getName());
                 taskNameEditText.setText(task.getName());
                 taskDescriptionEditText.setText(task.getDescription());
                 if (task.getStartDate() != null) {
@@ -72,7 +71,8 @@ public class AddTaskFragment extends DialogFragment {
             //新規の場合はここでTaskを作成
             changeFlag = false;
             //　3/18 13:50 ここのコンストラクタのStartDateとFinishDateをnew Date()　で入れた。
-            task = new Task(viewModel.callActivityMethod_getTaskNum(), null,null,new Date(),new Date(),new Date(),false);
+            // 3/24 10:40 IDはSaveGoalFragmentViewModelで設定するようにしたからここではとりあえず-1と設定しておく
+            task = new Task(-1, null,null,new Date(),new Date(),new Date(),false);
         }
 
         // DatePicker のリスナー設定 (API レベル 26 以上)
@@ -90,7 +90,7 @@ public class AddTaskFragment extends DialogFragment {
             });
         }
 
-        saveTaskButton = view.findViewById(R.id.saveTaskButton);
+        Button saveTaskButton = view.findViewById(R.id.saveTaskButton);
         saveTaskButton.setOnClickListener(view1 -> {
             String taskName = taskNameEditText.getText().toString();
             String taskDescription = taskDescriptionEditText.getText().toString();
@@ -100,26 +100,17 @@ public class AddTaskFragment extends DialogFragment {
             task.setCreateDate(new Date());
             task.setStartDate(taskStartDate);
             task.setFinishDate(taskFinishDate);
-
-            Log.d("Task", "Task - ID: " + task.getID() + ", name: " + task.getName() + ", state: " + task.getState());
-            Log.d("Task", "createDate: " + task.getCreateDate() + ", startDate: " + task.getStartDate() + ", finishDate: " + task.getFinishDate());
-
             //上書か新規保存か(ChangeTask() か　AddTask()　か)
             if (changeFlag) {
-                viewModel.callActivityMethod_changeTask(task);
+                viewModel.changeTask(task);
             } else {
-                viewModel.callActivityMethod_AddTask(task);
+                viewModel.addTask(task);
             }
             dismiss();
         });
 
         Button backButton = view.findViewById(R.id.backButton_addTasklayout);
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dismiss();
-            }
-        });
+        backButton.setOnClickListener(view1 -> dismiss());
 
         return view;
     }

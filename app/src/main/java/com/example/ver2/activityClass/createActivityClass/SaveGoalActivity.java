@@ -41,6 +41,7 @@ import java.util.List;
 public class SaveGoalActivity extends AppCompatActivity {
     //データベースとのやり取りを行うViewModel
     private GoalDataViewModel goalDataViewModel;
+    private SaveGoalFragmentViewModel saveGoalFragmentViewModel;
 
     private WillCanMust wcm;
     private SMART smart;
@@ -63,6 +64,7 @@ public class SaveGoalActivity extends AppCompatActivity {
         setContentView(R.layout.save_goal_layout);
 
         goalDataViewModel = new ViewModelProvider(this).get(GoalDataViewModel.class);
+        saveGoalFragmentViewModel = new ViewModelProvider(this).get(SaveGoalFragmentViewModel.class);
 
         Intent intent = getIntent();
         //前の画面で作ったオブジェクトを生成
@@ -102,8 +104,15 @@ public class SaveGoalActivity extends AppCompatActivity {
             Log.d(TAG, "break:Not intentObject");
         }
 
-        //UIを設定するメソッド
-        setActivityComponent(goal);
+        saveGoalFragmentViewModel.updateGoal(goal);
+        saveGoalFragmentViewModel.getGoalLiveData().observe(this, goalLiveData -> {
+            //goalとtaskListを更新
+            if (goalLiveData != null) {
+                goal = goalLiveData;
+                taskList = goal.getTasks();
+                setActivityComponent(goal);
+            }
+        });
 
         //タスク追加ボタン(新規作成だから openNewTaskFragment()メソッドを使用)
         Button addTaskButton = findViewById(R.id.addTaskButton);
@@ -220,16 +229,11 @@ public class SaveGoalActivity extends AppCompatActivity {
 
         // タスクリストのRecyclerView の設定
         RecyclerView taskRecyclerView = findViewById(R.id.SaveGoal_taskList);
-        taskList = new ArrayList<>(); // taskList を空の ArrayList で初期化
-
-        if (goal != null && goal.getTasks() != null) { // goal と goal.getTasks() が null でない場合
-            taskList = goal.getTasks(); // Goal オブジェクトの TaskList を taskList に代入
-        }
-
         //タスクリストのAdapter
         RecyclerViewTaskListAdapter adapter = new RecyclerViewTaskListAdapter(taskList);
         taskRecyclerView.setAdapter(adapter);
-        adapter.setOnItemClickListener(position -> openChangeTaskFragment(position));
+        adapter.setOnTaskRemoveListener(this::removeTask);
+        adapter.setOnItemClickListener(this::openChangeTaskFragment);
 
         // DatePicker のリスナー設定 (API レベル 26 以上)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -247,21 +251,19 @@ public class SaveGoalActivity extends AppCompatActivity {
 
     //新しいタスクを生成する際に使用するFragmentを生成するメソッド
     private void openNewTaskFragment() {
-        //ViewModelを生成：Activity側とFragment側との情報を行き来させるViewModel
-        SaveGoalFragmentViewModel viewModel = new ViewModelProvider(this).get(SaveGoalFragmentViewModel.class);
-        viewModel.setActivity(this);
+        //ここでViewModelのGoalをアップデートしておかないと、おそらくFragment生成後にすべて入力がなくなる
+        goalUpdate();
         //フラグメントを生成
         AddTaskFragment addTaskFragment = new AddTaskFragment();
         addTaskFragment.show(getSupportFragmentManager(), "AddTaskFragment");
     }
 
-    //すでにあるタスクを編集する際に使用する。Fragmentを生成するメソッド
+    //すでにあるタスクを編集する際に使用する。Fragmentを生成するメソッド(RecyclerViewのOnItemClickListenerにいれる)
     private void openChangeTaskFragment(int id) {
-        //ViewModelを生成
-        SaveGoalFragmentViewModel viewModel = new ViewModelProvider(this).get(SaveGoalFragmentViewModel.class);
-        viewModel.setActivity(this);
+        //ここでViewModelのGoalをアップデートしておかないと、おそらくFragment生成後にすべて入力がなくなる
+        goalUpdate();
 
-        Task changeTask = findTaskByID(id);
+        Task changeTask = taskList.get(id);
         //Fragmentに初期値を設定する
         Bundle bundle = new Bundle();
         bundle.putParcelable("changeTask", changeTask);
@@ -271,68 +273,27 @@ public class SaveGoalActivity extends AppCompatActivity {
         addTaskFragment.show(getSupportFragmentManager(), "AddTaskFragment");
     }
 
-    //ViewModelから呼ばれる、タスクを保存した際にtaskListにタスクを追加するメソッド。RecyclerViewもアップデートさせる
-    public void addTask(Task task) {
-        if (goal == null) {
-            goal = new Goal(null, null, null, null, null, false, null, null);
-        }
-        if (taskList == null) {
-            taskList = new ArrayList<>();
-        }
-
-        //goal.addTask(task);
-        taskList.add(task);
-
-        // アダプターにデータが変更されたことを通知
-        RecyclerView taskRecyclerView = findViewById(R.id.SaveGoal_taskList);
-        RecyclerViewTaskListAdapter adapter = (RecyclerViewTaskListAdapter) taskRecyclerView.getAdapter();
-        if (adapter != null) {
-            adapter.notifyDataSetChanged();
-        }
-
-        logTasks();
+    //RecyclerView(TaskListの)での削除ボタンのこと
+    public void removeTask(int position) {
+        Task removeTask = taskList.get(position);
+        saveGoalFragmentViewModel.removeTask(removeTask);
     }
 
-    //タスクを探すメソッド openChangeTaskFragmentで使用
-    private Task findTaskByID(int id) {
-        for (Task task : taskList) {
-            if (task.getID() == id) {
-                return task;
-            }
-        }
-        return null;
-    }
+    //goalオブジェクトに現在の入力をセットしてアップデートするメソッド
+    private void goalUpdate(){
+        //goalのアップデート
+        String goalName = goalNameEditText.getText().toString();
+        String goalDescription = goalDescriptionEditText.getText().toString();
 
-    //ViewModelから呼ばれる、タスクのIDを設定する際に用いる。
-    public int getTaskNum() {
-        if (taskList != null) {
-            return taskList.size();
-        } else {
-            taskList = new ArrayList<>();
-            return taskList.size();
-        }
-    }
+        goal.setName(goalName);
+        goal.setDescription(goalDescription);
+        goal.setCreateDate(new Date());
+        goal.setStartDate(startDate);
+        goal.setFinishDate(finishDate);
+        goal.setState(false);
+        goal.setTasks(taskList);
 
-    //ViewModelから呼ばれる、編集されたTaskを適用するメソッド
-    public void changeTask(Task task) {
-        for (int i = 0; i < taskList.size(); i++) {
-            if (taskList.get(i).getID() == task.getID()) {
-                taskList.set(i, task); // リスト内のオブジェクトを新しいTaskオブジェクトで置き換える
-                break; // IDが一致するオブジェクトは1つしかないため、ループを抜ける
-            }
-        }
-        RecyclerView taskRecyclerView = findViewById(R.id.SaveGoal_taskList);
-        RecyclerViewTaskListAdapter adapter = (RecyclerViewTaskListAdapter) taskRecyclerView.getAdapter();
-        if (adapter != null) {
-            adapter.notifyDataSetChanged();
-        }
-    }
-
-    private void logTasks() {
-        for (Task task : taskList) {
-            Log.d("task description", "ID:" + task.getID() + " NAME:" + task.getName() + " DESCRIPTION:" + task.getDescription());
-            Log.d("task description", "createDate:" + task.getCreateDate() + " startDate:" + task.getStartDate() + " finishDate:" + task.getFinishDate());
-        }
+        saveGoalFragmentViewModel.updateGoal(goal);
     }
 }
 
