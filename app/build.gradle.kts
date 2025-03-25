@@ -42,7 +42,8 @@ android {
             "src/main/res/layouts/memo_goal",
             "src/main/res/layouts/CreateGoal",
             "src/main/res/layouts/confirmGoal",
-            "src/main/res/layouts/task"
+            "src/main/res/layouts/task",
+            "src/main/res/layouts/MandalaChart"
         )
     }
 

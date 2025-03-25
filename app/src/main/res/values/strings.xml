@@ -150,4 +150,20 @@
     <string name="ConfirmGoalLayout_confirmTaskButton">タスク確認</string>
     <!-- confirm_taskLayout -->
     <string name="ConfirmTaskLayout_confirmButton">確認終了</string>
+
+
+
+    <!--Create Purpose-->
+    <!--MandalaChart-->
+    <string name="MandalaChart">マンダラチャート</string>
+    <!--MandalaChartTop-->
+    <string name="MandalaChartTopTitle">マンダラチャートとは</string>
+    <string name="MandalaChart_Explain">マンダラチャートは、3×3のマトリックスを用いて、目的・目標を設定する手法です。中心にメインの目的・目標を置き、その周囲に関連する要素を配置し、構成します。</string>
+    <!--CreateMandalaChartPurpose-->
+    <string name="MandalaChart_CreatePurpose_title">中心に置く、目的を考えよう</string>
+    <!--CreateMandalaChartGoal　　（目的って達成って言うのか？）-->
+    <string  name="MandalaChart_CreateGoal_title">目的の達成に必要な目標を考えて、マトリックスを埋めよう</string>
+    <!-- CreateMandalaChartTask-->
+    <string name="MandalaChart_CreateTask_title">目標を選択して、その目標のタスクを考えよう</string>
+
 </resources>
