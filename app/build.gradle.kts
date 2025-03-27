@@ -50,7 +50,8 @@ android {
 }
 
 dependencies {
-    implementation(libs.room.runtime) // 最新バージョンを確認してください
+    implementation(libs.room.runtime)
+    implementation(libs.gridlayout) // 最新バージョンを確認してください
     annotationProcessor(libs.room.compiler) // 最新バージョンを確認してください
     //implementation(libs.gson)
     implementation ("com.google.code.gson:gson:2.8.9")  // ✅ 手動で追加

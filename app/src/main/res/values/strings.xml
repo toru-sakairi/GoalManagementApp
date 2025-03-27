@@ -154,6 +154,7 @@
 
 
     <!--Create Purpose-->
+    <string name="purpose_editTextHint">目的を入力してください</string>
     <!--MandalaChart-->
     <string name="MandalaChart">マンダラチャート</string>
     <!--MandalaChartTop-->
