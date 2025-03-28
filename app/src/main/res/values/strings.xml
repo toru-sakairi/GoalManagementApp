@@ -155,16 +155,21 @@
 
     <!--Create Purpose-->
     <string name="purpose_editTextHint">目的を入力してください</string>
+    <string name="goal_editTextHint">目標を入力してください</string>
     <!--MandalaChart-->
     <string name="MandalaChart">マンダラチャート</string>
+    <string name="MandalaChart_Blank">未記入</string>
     <!--MandalaChartTop-->
     <string name="MandalaChartTopTitle">マンダラチャートとは</string>
     <string name="MandalaChart_Explain">マンダラチャートは、3×3のマトリックスを用いて、目的・目標を設定する手法です。中心にメインの目的・目標を置き、その周囲に関連する要素を配置し、構成します。</string>
     <!--CreateMandalaChartPurpose-->
     <string name="MandalaChart_CreatePurpose_title">中心に置く、目的を考えよう</string>
-    <!--CreateMandalaChartGoal　　（目的って達成って言うのか？）-->
+    <!--CreateMandalaChart top_chart　　（目的って達成って言うのか？）-->
     <string  name="MandalaChart_CreateGoal_title">目的の達成に必要な目標を考えて、マトリックスを埋めよう</string>
-    <!-- CreateMandalaChartTask-->
+    <string name="MandalaChart_CreateGoal_explain">入力する場所を押して目標を入力しよう</string>
+    <string name="MandalaChart_CreateGoal_Matrix_hint">入力してください</string>
+    <!-- CreateMandalaChart bottom_Chart-->
     <string name="MandalaChart_CreateTask_title">目標を選択して、その目標のタスクを考えよう</string>
+    <string name="MandalaChart_CreateTask_explain">入力する場所を押してタスク入力画面に移行</string>
 
 </resources>
