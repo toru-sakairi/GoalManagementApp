@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- Benchmarking 1 -->
+        <TextView
+            android:id="@+id/benchmarking_1_topTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/Benchmarking_topTitle"
+            android:textSize="25sp"
+            android:layout_marginTop="16dp" />
+
+        <TextView
+            android:id="@+id/benchmarking_1_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/Benchmarking_1_title"
+            android:textSize="20sp"
+            android:layout_marginTop="8dp" />
+
+        <TextView
+            android:id="@+id/benchmarking_1_explanation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/Benchmarking_1_explanation"
+            android:textSize="15sp"
+            android:layout_marginTop="8dp" />
+
+        <!-- Benchmarking 2 -->
+        <TextView
+            android:id="@+id/benchmarking_2_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/Benchmarking_2_title"
+            android:textSize="20sp"
+            android:layout_marginTop="16dp" />
+
+        <EditText
+            android:id="@+id/benchmarking_2_editText"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:hint="@string/EditText_hint"
+            android:textSize="15sp"
+            android:inputType="text"
+            android:layout_marginTop="8dp" />
+
+        <!-- Benchmarking 3 -->
+        <TextView
+            android:id="@+id/benchmarking_3_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/Benchmarking_3_title"
+            android:textSize="20sp"
+            android:layout_marginTop="16dp" />
+
+        <EditText
+            android:id="@+id/benchmarking_3_editText"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:hint="@string/EditText_hint"
+            android:textSize="15sp"
+            android:inputType="text"
+            android:layout_marginTop="8dp" />
+
+        <!-- Benchmarking 4 -->
+        <TextView
+            android:id="@+id/benchmarking_4_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/Benchmarking_4_title"
+            android:textSize="18sp"
+            android:layout_marginTop="16dp" />
+
+        <EditText
+            android:id="@+id/benchmarking_4_editText"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:hint="@string/EditText_hint"
+            android:textSize="15sp"
+            android:inputType="text"
+            android:layout_marginTop="8dp" />
+
+        <!-- Benchmarking 5 -->
+        <TextView
+            android:id="@+id/benchmarking_5_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/Benchmarking_5_title"
+            android:textSize="20sp"
+            android:layout_marginTop="16dp" />
+
+        <EditText
+            android:id="@+id/benchmarking_5_editText"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:hint="@string/EditText_hint"
+            android:textSize="15sp"
+            android:inputType="text"
+            android:layout_marginTop="8dp" />
+
+        <!-- Next and Back Buttons -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginTop="16dp">
+
+            <Button
+                android:id="@+id/benchmarking_saveButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/Button_Save"
+                android:textSize="15sp"
+                android:layout_marginEnd="8dp" />
+
+            <Button
+                android:id="@+id/benchmarking_backButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/Button_Back"
+                android:textSize="15sp"
+                android:layout_marginStart="8dp" />
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

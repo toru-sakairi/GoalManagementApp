@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- WillCanMust 1 -->
+            <TextView
+                android:id="@+id/confirm_WillCanMust_topTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/WillCanMust_topTitle"
+                android:textSize="25sp" />
+
+            <TextView
+                android:id="@+id/confirm_WillCanMust_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/WillCanMust_1_title"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/confirm_WillCanMust_explanation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/WillCanMust_1_explanation"
+                android:textSize="16sp" />
+
+            <!-- WillCanMust 2 -->
+
+            <TextView
+                android:id="@+id/confirm_WillCanMust_Will_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/WillCanMust_2_title"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/confirm_WillCanMust_textView_Will"
+                android:layout_width="match_parent"
+                android:layout_height="67dp"
+                android:layout_marginTop="8dp"
+                android:textSize="15sp" />
+
+            <!-- WillCanMust 3 -->
+
+            <TextView
+                android:id="@+id/confirm_WillCanMust_Can_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/WillCanMust_3_title"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/confirm_WillCanMust_textView_Can"
+                android:layout_width="match_parent"
+                android:layout_height="67dp"
+                android:layout_marginTop="8dp"
+                android:textSize="15sp" />
+
+            <!-- WillCanMust 4 -->
+            <TextView
+                android:id="@+id/confirm_WillCanMust_Must_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/WillCanMust_4_title"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/confirm_WillCanMust_textView_Must"
+                android:layout_width="match_parent"
+                android:layout_height="67dp"
+                android:layout_marginTop="8dp"
+                android:textSize="15sp" />
+
+            <!-- WillCanMust 5 -->
+            <TextView
+                android:id="@+id/confirm_WillCanMust_Goal_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/WillCanMust_5_title"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/confirm_WillCanMust_textView_Goal"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:layout_marginTop="8dp"
+                android:textSize="15sp" />
+
+            <!-- Save and Back Buttons -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/confirm_willCanMust_nextButton"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:layout_weight="1"
+                    android:text="@string/Button_Next"
+                    android:textSize="15sp" />
+
+                <Button
+                    android:id="@+id/confirm_willCanMust_backButton"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_weight="1"
+                    android:text="@string/Button_Back"
+                    android:textSize="15sp" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+    <Button
+        android:id="@+id/confirm_willCanMust_Edit_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|end"
+        android:layout_margin="16dp"
+        android:text="@string/Confirm_EditButton" />
+
+</FrameLayout>

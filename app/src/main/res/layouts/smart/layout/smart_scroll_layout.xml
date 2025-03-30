@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+    <!-- smart 1 -->
+    <TextView
+        android:id="@+id/smart_scrollLayout_topTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/SMART_topTitle"
+        android:textSize="25sp"
+        android:layout_marginTop="16dp" />
+
+    <TextView
+        android:id="@+id/smart_scrollLayout_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/SMART_1_title"
+        android:textSize="20sp"
+        android:layout_marginTop="8dp" />
+
+    <TextView
+        android:id="@+id/smart_scrollLayout_explanation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/SMART_1_explanation"
+        android:textSize="16sp"
+        android:layout_marginTop="8dp" />
+
+        <!-- SMART 2 -->
+
+        <TextView
+            android:id="@+id/smart_scrollLayout_Specific_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/SMART_2_title"
+            android:textSize="20sp"
+            android:layout_marginTop="8dp" />
+
+        <EditText
+            android:id="@+id/smart_scrollLayout_editText_Specific"
+            android:layout_width="match_parent"
+            android:layout_height="67dp"
+            android:hint="@string/EditText_hint"
+            android:textSize="15sp"
+            android:inputType="text"
+            android:layout_marginTop="8dp" />
+
+        <!-- SMART 3 -->
+
+        <TextView
+            android:id="@+id/smart_scrollLayout_Measurable_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/SMART_3_title"
+            android:textSize="20sp"
+            android:layout_marginTop="8dp" />
+
+        <EditText
+            android:id="@+id/smart_scrollLayout_editText_Measurable"
+            android:layout_width="match_parent"
+            android:layout_height="67dp"
+            android:hint="@string/EditText_hint"
+            android:textSize="15sp"
+            android:inputType="text"
+            android:layout_marginTop="8dp" />
+
+        <!-- SMART 4 -->
+
+        <TextView
+            android:id="@+id/smart_scrollLayout_Achivable_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/SMART_4_title"
+            android:textSize="20sp"
+            android:layout_marginTop="8dp" />
+
+        <EditText
+            android:id="@+id/smart_scrollLayout_editText_Achievable"
+            android:layout_width="match_parent"
+            android:layout_height="67dp"
+            android:hint="@string/EditText_hint"
+            android:textSize="15sp"
+            android:inputType="text"
+            android:layout_marginTop="8dp" />
+
+        <!-- SMART 5 -->
+
+        <TextView
+            android:id="@+id/smart_scrollLayout_Relevant_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/SMART_5_title"
+            android:textSize="20sp"
+            android:layout_marginTop="8dp" />
+
+        <EditText
+            android:id="@+id/smart_scrollLayout_editText_relevant"
+            android:layout_width="match_parent"
+            android:layout_height="67dp"
+            android:hint="@string/EditText_hint"
+            android:textSize="15sp"
+            android:inputType="text"
+            android:layout_marginTop="8dp" />
+
+        <!-- SMART 6 -->
+
+        <TextView
+            android:id="@+id/smart_scrollLayout_timeBound_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/SMART_6_title"
+            android:textSize="20sp"
+            android:layout_marginTop="8dp" />
+
+        <EditText
+            android:id="@+id/smart_scrollLayout_editText_timeBound"
+            android:layout_width="match_parent"
+            android:layout_height="67dp"
+            android:hint="@string/EditText_hint"
+            android:textSize="15sp"
+            android:inputType="text"
+            android:layout_marginTop="8dp" />
+
+        <!-- SMART 7 -->
+        <TextView
+            android:id="@+id/smart_scrollLayout_goal_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/SMART_7_title"
+            android:textSize="20sp"
+            android:layout_marginTop="8dp" />
+
+        <EditText
+            android:id="@+id/smart_scrollLayout_editText_goal"
+            android:layout_width="match_parent"
+            android:layout_height="67dp"
+            android:hint="@string/EditText_hint"
+            android:textSize="15sp"
+            android:inputType="text"
+            android:layout_marginTop="8dp" />
+
+    <!-- Save and Back Buttons -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginTop="16dp">
+
+        <Button
+            android:id="@+id/smart_saveButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/Button_Save"
+            android:textSize="15sp"
+            android:layout_marginEnd="8dp" />
+
+        <Button
+            android:id="@+id/smart_backButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/Button_Back"
+            android:textSize="15sp"
+            android:layout_marginStart="8dp" />
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>
